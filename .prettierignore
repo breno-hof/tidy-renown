@@ -1,0 +1,6 @@
+dist/
+.test-build/
+node_modules/
+package-lock.json
+*.hbs
+SPEC.md

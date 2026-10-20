@@ -1,0 +1,107 @@
+{{#with tidyRenown}}
+<section class="tr-tab">
+  <header class="tr-tab-header">
+    <h3 class="tr-title"><i class="fa-solid fa-flag" inert></i> {{localize "TIDY_RENOWN.TabTitle"}}</h3>
+    {{#if isGM}}
+      <button type="button" class="button button-secondary" data-tr-action="manage">
+        <i class="fa-solid fa-gear" inert></i> {{localize "TIDY_RENOWN.Tab.Manage"}}
+      </button>
+    {{/if}}
+  </header>
+
+  <div class="tr-standing tr-standing-{{dispositionKey}}">
+    {{#if hasStanding}}
+      <div class="tr-standing-main">
+        <span class="tr-muted">{{localize "TIDY_RENOWN.Npc.PartyScore"}}</span>
+        <strong class="tr-standing-score">{{partyScore}}</strong>
+        <span class="tr-pill tr-pill-{{dispositionKey}}">{{dispositionLabel}}</span>
+      </div>
+      <span class="tr-muted">{{thresholdsLabel}}</span>
+    {{else}}
+      <span class="tr-muted">{{localize "TIDY_RENOWN.Npc.NoStanding"}}</span>
+    {{/if}}
+    {{#if isGM}}
+      <div class="tr-standing-controls">
+        {{#unless autoDisposition}}<span class="tr-muted">{{localize "TIDY_RENOWN.Npc.AutoOff"}}</span>{{/unless}}
+        <button type="button" class="button button-icon-only button-borderless" data-tr-action="toggle-lock" data-locked="{{locked}}" data-tooltip="{{#if locked}}{{localize "TIDY_RENOWN.Npc.Unlock"}}{{else}}{{localize "TIDY_RENOWN.Npc.Lock"}}{{/if}}">
+          <i class="fa-solid {{#if locked}}fa-lock{{else}}fa-lock-open{{/if}}" inert></i>
+        </button>
+        <button type="button" class="button button-icon-only button-borderless" data-tr-action="recalc" data-tooltip="{{localize "TIDY_RENOWN.Manager.Recalc"}}">
+          <i class="fa-solid fa-rotate" inert></i>
+        </button>
+      </div>
+    {{/if}}
+  </div>
+
+  <h4 class="tr-section-title">{{localize "TIDY_RENOWN.Npc.MemberOf"}}</h4>
+  {{#if memberOf.length}}
+    <ul class="tr-chips">
+      {{#each memberOf}}
+        <li class="tr-chip"{{#if color}} style="--tr-faction-color: {{color}}"{{/if}}>
+          {{#if img}}<img src="{{img}}" alt="" />{{else}}<i class="fa-solid fa-flag" inert></i>{{/if}}
+          <span>{{name}}</span>
+          {{#if ../isGM}}
+            <button type="button" class="button button-icon-only button-borderless" data-tr-action="npc-remove-faction" data-faction-id="{{id}}" data-tooltip="{{localize "TIDY_RENOWN.Npc.LeaveFaction"}}">
+              <i class="fa-solid fa-xmark" inert></i>
+            </button>
+          {{/if}}
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p class="tr-muted">{{localize "TIDY_RENOWN.Npc.NoFactions"}}</p>
+  {{/if}}
+
+  {{#if isGM}}
+    {{#if availableFactions.length}}
+      <div class="tr-add-row">
+        <select data-tr-select="npc-faction" aria-label="{{localize "TIDY_RENOWN.Npc.JoinFaction"}}">
+          {{#each availableFactions}}<option value="{{id}}">{{name}}</option>{{/each}}
+        </select>
+        <button type="button" class="button" data-tr-action="npc-add-faction">
+          <i class="fa-solid fa-plus" inert></i> {{localize "TIDY_RENOWN.Npc.JoinFaction"}}
+        </button>
+      </div>
+    {{/if}}
+  {{/if}}
+
+  <h4 class="tr-section-title">{{localize "TIDY_RENOWN.Npc.Relations"}}</h4>
+  {{#if hasRelations}}
+    <ul class="tr-rows">
+      {{#each relations}}
+        <li class="tr-row{{#if negative}} tr-negative{{/if}}" data-actor-id="{{actorId}}">
+          <img class="tr-row-img" src="{{img}}" alt="" />
+          <a class="tr-row-name" data-tr-action="open-actor" data-open-id="{{actorId}}">{{name}}</a>
+          <span class="tr-score{{#if negative}} tr-score-neg{{/if}}">{{score}}</span>
+          {{#if ../isGM}}
+            <span class="tr-row-controls">
+              {{#each ../quickDeltas}}
+                <button type="button" class="button tr-delta tr-delta-sm{{#if negative}} tr-delta-neg{{/if}}" data-tr-action="adjust" data-key="{{../key}}" data-delta="{{delta}}">{{label}}</button>
+              {{/each}}
+              <input type="number" class="tr-score-input" step="1" value="{{score}}" data-tr-score data-key="{{key}}" aria-label="{{localize "TIDY_RENOWN.Tab.Score"}}" />
+              <button type="button" class="button button-icon-only button-borderless tr-danger" data-tr-action="remove" data-key="{{key}}" data-tooltip="{{localize "TIDY_RENOWN.Tab.RemoveRelation"}}">
+                <i class="fa-solid fa-trash" inert></i>
+              </button>
+            </span>
+          {{/if}}
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <p class="tr-muted">{{localize "TIDY_RENOWN.Npc.NoRelations"}}</p>
+  {{/if}}
+
+  {{#if isGM}}
+    {{#if availableCharacters.length}}
+      <div class="tr-add-row">
+        <select data-tr-select="character" aria-label="{{localize "TIDY_RENOWN.Npc.AddRelation"}}">
+          {{#each availableCharacters}}<option value="{{id}}">{{name}}</option>{{/each}}
+        </select>
+        <button type="button" class="button" data-tr-action="npc-add-relation" data-npc-id="{{npcId}}">
+          <i class="fa-solid fa-plus" inert></i> {{localize "TIDY_RENOWN.Npc.AddRelation"}}
+        </button>
+      </div>
+    {{/if}}
+  {{/if}}
+</section>
+{{/with}}

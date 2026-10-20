@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.test-build/
+module.zip
+payload*.json
+response.json
+headers.txt
+foundryconfig.json
+.DS_Store

@@ -1,0 +1,156 @@
+<div class="tr-manager-body">
+{{#if isList}}
+  <header class="tr-manager-header">
+    <p class="tr-muted">{{localize "TIDY_RENOWN.Manager.Intro"}}</p>
+    <div class="tr-manager-actions">
+      <button type="button" data-action="recalc"><i class="fa-solid fa-rotate" inert></i> {{localize "TIDY_RENOWN.Manager.Recalc"}}</button>
+      <button type="button" data-action="newFaction"><i class="fa-solid fa-plus" inert></i> {{localize "TIDY_RENOWN.Manager.NewFaction"}}</button>
+    </div>
+  </header>
+
+  {{#if factions.length}}
+    <ul class="tr-faction-list">
+      {{#each factions}}
+        <li class="tr-faction-item" data-faction-id="{{id}}"{{#if color}} style="--tr-faction-color: {{color}}"{{/if}}>
+          <button type="button" class="tr-faction-open" data-action="openFaction">
+            {{#if img}}<img src="{{img}}" alt="" />{{else}}<span class="tr-faction-img-placeholder"><i class="fa-solid fa-flag" inert></i></span>{{/if}}
+            <span class="tr-faction-item-text">
+              <strong>{{name}}</strong>
+              <span class="tr-muted">{{kindLabel}}</span>
+            </span>
+            <span class="tr-muted">{{localize "TIDY_RENOWN.Manager.Counts" members=memberCount ranks=rankCount}}</span>
+            <i class="fa-solid fa-chevron-right" inert></i>
+          </button>
+        </li>
+      {{/each}}
+    </ul>
+  {{else}}
+    <div class="tr-empty">
+      <i class="fa-solid fa-people-group" inert></i>
+      <p>{{localize "TIDY_RENOWN.Manager.Empty"}}</p>
+    </div>
+  {{/if}}
+{{else}}
+  <header class="tr-manager-header">
+    <button type="button" data-action="back"><i class="fa-solid fa-arrow-left" inert></i> {{localize "TIDY_RENOWN.Manager.Back"}}</button>
+    <div class="tr-manager-actions">
+      <button type="button" class="tr-danger" data-action="deleteFaction"><i class="fa-solid fa-trash" inert></i> {{localize "TIDY_RENOWN.Manager.Delete"}}</button>
+    </div>
+  </header>
+
+  <fieldset>
+    <legend>{{localize "TIDY_RENOWN.Manager.Details"}}</legend>
+    <div class="form-group">
+      <label>{{localize "TIDY_RENOWN.Faction.Name"}}</label>
+      <div class="form-fields"><input type="text" name="faction.name" value="{{faction.name}}" required /></div>
+    </div>
+    <div class="form-group">
+      <label>{{localize "TIDY_RENOWN.Faction.KindLabel"}}</label>
+      <div class="form-fields">
+        <select name="faction.kind">
+          {{#each kinds}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{label}}</option>{{/each}}
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>{{localize "TIDY_RENOWN.Faction.Image"}}</label>
+      <div class="form-fields"><file-picker name="faction.img" type="image" value="{{faction.img}}"></file-picker></div>
+    </div>
+    <div class="form-group">
+      <label>{{localize "TIDY_RENOWN.Faction.Color"}}</label>
+      <div class="form-fields"><color-picker name="faction.color" value="{{faction.color}}"></color-picker></div>
+    </div>
+    <div class="form-group">
+      <label>{{localize "TIDY_RENOWN.Faction.ProgressMax"}}</label>
+      <div class="form-fields"><input type="number" name="faction.progressMax" value="{{faction.progressMax}}" min="1" step="1" /></div>
+      <p class="hint">{{localize "TIDY_RENOWN.Faction.ProgressMaxHint"}}</p>
+    </div>
+    <div class="form-group">
+      <label>{{localize "TIDY_RENOWN.Faction.Cap"}}</label>
+      <div class="form-fields"><input type="number" name="faction.cap" value="{{faction.cap}}" step="1" placeholder="—" /></div>
+      <p class="hint">{{localize "TIDY_RENOWN.Faction.CapHint"}}</p>
+    </div>
+    <div class="form-group stacked">
+      <label>{{localize "TIDY_RENOWN.Faction.Description"}}</label>
+      <textarea name="faction.description" rows="3">{{faction.description}}</textarea>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>{{localize "TIDY_RENOWN.Manager.Ranks"}}</legend>
+    <p class="hint">{{localize "TIDY_RENOWN.Manager.RanksHint"}}</p>
+    {{#if hasRanks}}
+      <ol class="tr-rank-list">
+        {{#each ranks}}
+          <li class="tr-rank" data-rank-id="{{id}}">
+            <input type="hidden" name="ranks.{{index}}.id" value="{{id}}" />
+            <input type="number" class="tr-rank-score" name="ranks.{{index}}.minScore" value="{{minScore}}" step="1" aria-label="{{localize "TIDY_RENOWN.Rank.MinScore"}}" data-tooltip="{{localize "TIDY_RENOWN.Rank.MinScore"}}" />
+            <input type="text" class="tr-rank-name" name="ranks.{{index}}.name" value="{{name}}" placeholder="{{localize "TIDY_RENOWN.Rank.NamePlaceholder"}}" />
+            <button type="button" class="tr-icon-button tr-danger" data-action="removeRank" data-tooltip="{{localize "TIDY_RENOWN.Rank.Remove"}}"><i class="fa-solid fa-trash" inert></i></button>
+            <textarea class="tr-rank-desc" name="ranks.{{index}}.description" rows="2" placeholder="{{localize "TIDY_RENOWN.Rank.DescriptionPlaceholder"}}">{{description}}</textarea>
+          </li>
+        {{/each}}
+      </ol>
+    {{/if}}
+    <div class="tr-manager-actions">
+      <button type="button" data-action="dmgThresholds"><i class="fa-solid fa-book" inert></i> {{localize "TIDY_RENOWN.Manager.UseDmgThresholds"}}</button>
+      <button type="button" data-action="addRank"><i class="fa-solid fa-plus" inert></i> {{localize "TIDY_RENOWN.Manager.AddRank"}}</button>
+    </div>
+  </fieldset>
+
+  <fieldset class="tr-dropzone">
+    <legend>{{localize "TIDY_RENOWN.Manager.Members"}}</legend>
+    <p class="hint">{{localize "TIDY_RENOWN.Manager.DropHint"}}</p>
+
+    {{#if hasRelations}}
+      <ul class="tr-rows">
+        {{#each relations}}
+          <li class="tr-row{{#if negative}} tr-negative{{/if}}" data-actor-id="{{actorId}}">
+            <img class="tr-row-img" src="{{img}}" alt="" />
+            <a class="tr-row-name" data-action="openActor">{{name}} <span class="tr-muted">({{typeLabel}})</span></a>
+            {{#if rankName}}<span class="tr-pill tr-pill-rank">{{rankName}}</span>{{/if}}
+            <span class="tr-row-controls">
+              {{#each ../quickDeltas}}
+                <button type="button" class="tr-delta{{#if negative}} tr-delta-neg{{/if}}" data-action="adjust" data-delta="{{delta}}">{{label}}</button>
+              {{/each}}
+              <input type="number" class="tr-score-input" name="scores.{{actorId}}" value="{{score}}" step="1" aria-label="{{localize "TIDY_RENOWN.Tab.Score"}}" />
+              <button type="button" class="tr-icon-button{{#if member}} tr-active{{/if}}" data-action="toggleMember" data-member="{{member}}" data-tooltip="{{#if member}}{{localize "TIDY_RENOWN.Tab.RemoveMember"}}{{else}}{{localize "TIDY_RENOWN.Tab.MakeMember"}}{{/if}}">
+                <i class="fa-solid {{#if member}}fa-user-check{{else}}fa-user-xmark{{/if}}" inert></i>
+              </button>
+              <button type="button" class="tr-icon-button tr-danger" data-action="removeRelation" data-tooltip="{{localize "TIDY_RENOWN.Tab.RemoveRelation"}}"><i class="fa-solid fa-trash" inert></i></button>
+            </span>
+          </li>
+        {{/each}}
+      </ul>
+    {{/if}}
+
+    {{#if hasNpcs}}
+      <h4 class="tr-section-title">{{localize "TIDY_RENOWN.Manager.NpcMembers"}}</h4>
+      <ul class="tr-rows">
+        {{#each npcs}}
+          <li class="tr-row" data-actor-id="{{actorId}}">
+            <img class="tr-row-img" src="{{img}}" alt="" />
+            <a class="tr-row-name" data-action="openActor">{{name}}</a>
+            <span class="tr-row-controls">
+              <button type="button" class="tr-icon-button tr-danger" data-action="removeNpc" data-tooltip="{{localize "TIDY_RENOWN.Npc.LeaveFaction"}}"><i class="fa-solid fa-xmark" inert></i></button>
+            </span>
+          </li>
+        {{/each}}
+      </ul>
+    {{/if}}
+
+    {{#unless hasRelations}}{{#unless hasNpcs}}
+      <p class="tr-muted">{{localize "TIDY_RENOWN.Manager.NoMembers"}}</p>
+    {{/unless}}{{/unless}}
+
+    {{#if addable.length}}
+      <div class="tr-add-row">
+        <select data-tr-add-actor aria-label="{{localize "TIDY_RENOWN.Manager.AddActor"}}">
+          {{#each addable}}<option value="{{id}}">{{name}}</option>{{/each}}
+        </select>
+        <button type="button" data-action="addActor"><i class="fa-solid fa-plus" inert></i> {{localize "TIDY_RENOWN.Manager.AddActor"}}</button>
+      </div>
+    {{/if}}
+  </fieldset>
+{{/if}}
+</div>

@@ -1,0 +1,518 @@
+/*
+ * Tidy Renown
+ * Inside Tidy sheets every color comes from Tidy's theme variables (--t5e-*),
+ * so light/dark mode and the sheet accent color are inherited automatically.
+ * The faction manager is not a Tidy sheet, so it falls back to Foundry's
+ * core theme variables. No absolute colors are used outside of fallbacks.
+ */
+
+.tidy-renown-tab,
+.tidy-renown-manager {
+  --tr-text: var(--t5e-color-text-default, var(--color-text-primary, currentColor));
+  --tr-muted: var(--t5e-color-text-lighter, var(--color-text-secondary, currentColor));
+  --tr-accent: var(--t5e-theme-color-default, var(--color-warm-2, currentColor));
+  --tr-gold: var(--t5e-color-text-gold, var(--tr-accent));
+  --tr-card: var(--t5e-component-card-default, color-mix(in srgb, currentColor 5%, transparent));
+  --tr-border: var(--t5e-component-field-border, var(--color-border, currentColor));
+  --tr-field: var(--t5e-component-field-background, transparent);
+  --tr-track: color-mix(in srgb, var(--tr-text) 12%, transparent);
+  --tr-danger: var(--t5e-warning-accent-color, var(--color-level-error, currentColor));
+  --tr-success: var(--color-level-success, var(--tr-gold));
+  --tr-radius: var(--t5e-component-card-radius, 0.375rem);
+  --tr-gap: var(--t5e-size-2x, 0.5rem);
+  color: var(--tr-text);
+}
+
+.tidy-renown-tab .tr-tab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tr-gap);
+  padding: var(--tr-gap);
+}
+
+/* ---------- Shared bits ---------- */
+
+.tidy-renown-tab .tr-muted,
+.tidy-renown-manager .tr-muted {
+  color: var(--tr-muted);
+  font-size: 0.85em;
+}
+
+.tidy-renown-tab .tr-danger,
+.tidy-renown-manager .tr-danger {
+  color: var(--tr-danger);
+}
+
+.tidy-renown-tab .tr-tab-header,
+.tidy-renown-manager .tr-manager-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tr-gap);
+}
+
+.tidy-renown-tab .tr-title {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 1.1rem;
+}
+
+.tidy-renown-tab .tr-section-title,
+.tidy-renown-manager .tr-section-title {
+  margin: 0.5rem 0 0;
+  font-size: 0.95rem;
+  border-bottom: 1px solid var(--tr-border);
+  padding-bottom: 0.125rem;
+}
+
+.tidy-renown-tab .tr-empty,
+.tidy-renown-manager .tr-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  border: 1px dashed var(--tr-border);
+  border-radius: var(--tr-radius);
+}
+
+.tidy-renown-tab .tr-empty > i,
+.tidy-renown-manager .tr-empty > i {
+  font-size: 1.75rem;
+  color: var(--tr-muted);
+}
+
+.tidy-renown-tab .tr-empty p,
+.tidy-renown-manager .tr-empty p {
+  margin: 0;
+}
+
+.tidy-renown-tab .tr-pill,
+.tidy-renown-manager .tr-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 0.5rem;
+  border: 1px solid var(--tr-border);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  line-height: 1.4rem;
+  white-space: nowrap;
+  color: var(--tr-muted);
+}
+
+.tidy-renown-tab .tr-pill-member {
+  color: var(--tr-text);
+  border-color: var(--tr-faction-color, var(--tr-accent));
+}
+
+.tidy-renown-tab .tr-pill-rank,
+.tidy-renown-manager .tr-pill-rank {
+  color: var(--tr-gold);
+  border-color: var(--tr-gold);
+  font-weight: bold;
+}
+
+.tidy-renown-tab .tr-pill-hostile {
+  color: var(--tr-danger);
+  border-color: var(--tr-danger);
+}
+
+.tidy-renown-tab .tr-pill-friendly {
+  color: var(--tr-success);
+  border-color: var(--tr-success);
+}
+
+/* ---------- Faction cards ---------- */
+
+.tidy-renown-tab .tr-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 0.5rem 0.625rem;
+  background: var(--tr-card);
+  border: 1px solid var(--tr-border);
+  border-inline-start: 4px solid var(--tr-faction-color, var(--tr-accent));
+  border-radius: var(--tr-radius);
+}
+
+.tidy-renown-tab .tr-card-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tidy-renown-tab .tr-faction-img,
+.tidy-renown-manager .tr-faction-img-placeholder,
+.tidy-renown-manager .tr-faction-open img {
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  flex: 0 0 auto;
+  object-fit: cover;
+  border: 1px solid var(--tr-border);
+  border-radius: var(--tr-radius);
+}
+
+.tidy-renown-tab .tr-faction-img-placeholder,
+.tidy-renown-manager .tr-faction-img-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tr-faction-color, var(--tr-accent));
+}
+
+.tidy-renown-tab .tr-card-titles {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.tidy-renown-tab .tr-card-name {
+  margin: 0;
+  font-size: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tidy-renown-tab .tr-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.tidy-renown-tab .tr-meter {
+  position: relative;
+  block-size: 1.25rem;
+  background: var(--tr-track);
+  border: 1px solid var(--tr-border);
+  border-radius: var(--tr-radius);
+  overflow: hidden;
+}
+
+.tidy-renown-tab .tr-meter-fill {
+  block-size: 100%;
+  background: var(--tr-faction-color, var(--tr-accent));
+  opacity: 0.85;
+  transition: width var(--t5e-transition-default, 150ms ease);
+}
+
+.tidy-renown-tab .tr-negative .tr-meter-fill {
+  background: var(--tr-danger);
+}
+
+.tidy-renown-tab .tr-meter-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--tr-text);
+  text-shadow: 0 0 3px var(--tr-card);
+}
+
+.tidy-renown-tab .tr-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 0.75rem;
+}
+
+.tidy-renown-tab .tr-controls,
+.tidy-renown-tab .tr-row-controls,
+.tidy-renown-manager .tr-row-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.tidy-renown-tab .tr-delta,
+.tidy-renown-manager .tr-delta {
+  min-inline-size: 2rem;
+  padding-inline: 0.375rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.tidy-renown-tab .tr-delta-sm {
+  min-inline-size: 1.75rem;
+  font-size: 0.8rem;
+}
+
+.tidy-renown-tab .tr-delta-neg,
+.tidy-renown-manager .tr-delta-neg {
+  color: var(--tr-danger);
+}
+
+.tidy-renown-tab .tr-score-input,
+.tidy-renown-manager .tr-score-input {
+  inline-size: 3.5rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.tidy-renown-tab .tr-benefits summary {
+  cursor: pointer;
+  color: var(--tr-gold);
+  font-size: 0.85rem;
+}
+
+.tidy-renown-tab .tr-benefits ul {
+  margin: 0.25rem 0 0;
+  padding-inline-start: 1.25rem;
+}
+
+.tidy-renown-tab .tr-notes {
+  inline-size: 100%;
+  min-block-size: 1.75rem;
+  resize: vertical;
+  font-size: 0.85rem;
+  background: var(--tr-field);
+  color: var(--tr-text);
+}
+
+.tidy-renown-tab .tr-notes-text {
+  margin: 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--tr-muted);
+}
+
+/* ---------- Rows (NPC relations, members) ---------- */
+
+.tidy-renown-tab .tr-rows,
+.tidy-renown-manager .tr-rows,
+.tidy-renown-tab .tr-chips,
+.tidy-renown-manager .tr-faction-list,
+.tidy-renown-manager .tr-rank-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tidy-renown-tab .tr-row,
+.tidy-renown-manager .tr-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid var(--tr-track);
+}
+
+.tidy-renown-tab .tr-row-img,
+.tidy-renown-manager .tr-row-img {
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  object-fit: cover;
+  border: none;
+  border-radius: 50%;
+}
+
+.tidy-renown-tab .tr-row-name,
+.tidy-renown-manager .tr-row-name {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.tidy-renown-tab .tr-score {
+  min-inline-size: 2rem;
+  text-align: end;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+}
+
+.tidy-renown-tab .tr-score-neg,
+.tidy-renown-tab .tr-negative .tr-score {
+  color: var(--tr-danger);
+}
+
+.tidy-renown-tab .tr-add-row,
+.tidy-renown-manager .tr-add-row {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin-top: 0.25rem;
+}
+
+.tidy-renown-tab .tr-add-row select,
+.tidy-renown-manager .tr-add-row select {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+/* ---------- NPC tab ---------- */
+
+.tidy-renown-tab .tr-standing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 0.75rem;
+  padding: 0.5rem 0.625rem;
+  background: var(--tr-card);
+  border: 1px solid var(--tr-border);
+  border-radius: var(--tr-radius);
+}
+
+.tidy-renown-tab .tr-standing-hostile {
+  border-color: var(--tr-danger);
+}
+
+.tidy-renown-tab .tr-standing-friendly {
+  border-color: var(--tr-success);
+}
+
+.tidy-renown-tab .tr-standing-main,
+.tidy-renown-tab .tr-standing-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tidy-renown-tab .tr-standing-score {
+  font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.tidy-renown-tab .tr-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.tidy-renown-tab .tr-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.125rem 0.25rem 0.125rem 0.5rem;
+  border: 1px solid var(--tr-faction-color, var(--tr-border));
+  border-radius: 999px;
+}
+
+.tidy-renown-tab .tr-chip img {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  border: none;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* ---------- Faction manager (Foundry window) ---------- */
+
+.tidy-renown-manager .window-content {
+  padding: 0;
+}
+
+.tidy-renown-manager .tr-manager-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  overflow-y: auto;
+  block-size: 100%;
+}
+
+.tidy-renown-manager .tr-manager-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.375rem;
+}
+
+.tidy-renown-manager .tr-manager-actions button {
+  flex: 0 0 auto;
+  inline-size: auto;
+}
+
+.tidy-renown-manager .tr-faction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.tidy-renown-manager .tr-faction-item {
+  border: 1px solid var(--tr-border);
+  border-inline-start: 4px solid var(--tr-faction-color, var(--tr-accent));
+  border-radius: var(--tr-radius);
+}
+
+.tidy-renown-manager .tr-faction-open {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  inline-size: 100%;
+  block-size: auto;
+  padding: 0.375rem 0.625rem;
+  background: none;
+  border: none;
+  text-align: start;
+}
+
+.tidy-renown-manager .tr-faction-item-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.tidy-renown-manager .tr-rank-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.tidy-renown-manager .tr-rank {
+  display: grid;
+  grid-template-columns: 4rem 1fr auto;
+  gap: 0.25rem 0.375rem;
+  align-items: center;
+}
+
+.tidy-renown-manager .tr-rank-desc {
+  grid-column: 1 / -1;
+  resize: vertical;
+}
+
+.tidy-renown-manager .tr-icon-button {
+  flex: 0 0 auto;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tidy-renown-manager .tr-icon-button.tr-active {
+  color: var(--tr-success);
+}
+
+.tidy-renown-manager .tr-row-controls button.tr-delta {
+  flex: 0 0 auto;
+  inline-size: auto;
+  block-size: 1.75rem;
+}
+
+.tidy-renown-manager .tr-dropzone.tr-drag-over {
+  outline: 2px dashed var(--tr-accent);
+  outline-offset: -2px;
+}
+
+.tidy-renown-manager .tr-negative .tr-score-input {
+  color: var(--tr-danger);
+}
+
+/* Actor directory button */
+.tidy-renown-open {
+  flex: 1 0 100%;
+}

@@ -1,0 +1,55 @@
+{
+  "id": "tidy-renown",
+  "title": "Tidy Renown – Facções & Reputação",
+  "description": "Renome (Renown) do Dungeon Master's Guide 2024 integrado ao Tidy 5e Sheets: grupos, scores, ranks, relações com NPCs e disposição automática de tokens.",
+  "version": "0.0.0",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14"
+  },
+  "authors": [
+    {
+      "name": "a definir"
+    }
+  ],
+  "esmodules": ["scripts/main.js"],
+  "styles": ["styles/tidy-renown.css"],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    },
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "lang/pt-BR.json"
+    }
+  ],
+  "socket": true,
+  "relationships": {
+    "systems": [
+      {
+        "id": "dnd5e",
+        "type": "system",
+        "compatibility": {
+          "minimum": "6.0.0"
+        }
+      }
+    ],
+    "requires": [
+      {
+        "id": "tidy5e-sheet",
+        "type": "module",
+        "compatibility": {
+          "minimum": "14.0.0"
+        }
+      }
+    ]
+  },
+  "url": "https://github.com/OWNER/tidy-renown",
+  "bugs": "https://github.com/OWNER/tidy-renown/issues",
+  "readme": "https://github.com/OWNER/tidy-renown#readme",
+  "manifest": "",
+  "download": ""
+}

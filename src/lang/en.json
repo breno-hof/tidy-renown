@@ -1,0 +1,139 @@
+{
+  "TIDY_RENOWN": {
+    "TabTitle": "Renown",
+    "Tab": {
+      "PartyRenown": "party renown",
+      "Manage": "Manage",
+      "Empty": "No renown with any group yet.",
+      "EmptyGM": "Add a group below or use the faction manager.",
+      "Member": "Member",
+      "NotMember": "Not a member",
+      "Cap": "Cap",
+      "Score": "Renown Score",
+      "RemoveMember": "Remove membership",
+      "MakeMember": "Make member",
+      "OpenFaction": "Open in the faction manager",
+      "RemoveRelation": "Remove relation",
+      "Benefits": "Benefits reached",
+      "Notes": "GM notes…",
+      "AddFaction": "Add group",
+      "NpcRelations": "Relations with NPCs",
+      "AddNpc": "Add NPC relation",
+      "IncreaseHint": "Ask the GM for +1 renown",
+      "NextRank": "Next: {rank} at {score}",
+      "MissingNpc": "Deleted NPC"
+    },
+    "Rank": {
+      "Unnamed": "Threshold {score}",
+      "MinScore": "Minimum Renown Score",
+      "NamePlaceholder": "Rank or title (optional)",
+      "DescriptionPlaceholder": "Benefits and other prerequisites (free text)",
+      "Remove": "Remove rank"
+    },
+    "Faction": {
+      "Kind": {
+        "faction": "Faction",
+        "organization": "Organization",
+        "community": "Community"
+      },
+      "NewName": "New Group",
+      "Unnamed": "(unnamed)",
+      "Name": "Name",
+      "KindLabel": "Type",
+      "Image": "Image",
+      "Color": "Accent color",
+      "ProgressMax": "Progress bar scale",
+      "ProgressMaxHint": "Visual only. The DMG names 50 as its highest benefit threshold.",
+      "Cap": "Score cap",
+      "CapHint": "Optional. Leave empty for no cap (the DMG sets none).",
+      "Description": "Description"
+    },
+    "Manager": {
+      "Title": "Renown Groups",
+      "Open": "Open manager",
+      "Hint": "Create factions, organizations and communities, their ranks and members.",
+      "Button": "Renown",
+      "Intro": "Groups track renown (DMG 2024). Membership lists are calculated from actors.",
+      "Recalc": "Recalculate token dispositions",
+      "NewFaction": "New group",
+      "Counts": "{members} members · {ranks} ranks",
+      "Empty": "No groups yet. Create the first one.",
+      "Back": "All groups",
+      "Delete": "Delete group",
+      "DeleteTitle": "Delete group",
+      "DeleteConfirm": "Delete <strong>{name}</strong>? Its renown entries will be removed from every actor.",
+      "Details": "Details",
+      "Ranks": "Ranks and benefits",
+      "RanksHint": "The DMG 2024 defines no default ranks: set your own thresholds. A rank is reached at its minimum score; other prerequisites are just text.",
+      "UseDmgThresholds": "Use DMG thresholds (3, 10, 50)",
+      "AddRank": "Add rank",
+      "Members": "Members and relations",
+      "DropHint": "Drag actors here from the sidebar, or pick one below. Characters and the party get a score; NPCs become group members.",
+      "NpcMembers": "NPC members",
+      "NoMembers": "Nobody is linked to this group yet.",
+      "AddActor": "Add"
+    },
+    "Npc": {
+      "PartyScore": "Party score",
+      "NoStanding": "Outside the automation: no groups and no individual relations.",
+      "Thresholds": "Hostile below {hostile} · Friendly above {friendly}",
+      "AutoOff": "Automatic disposition is off",
+      "Lock": "Lock disposition (stop automation for this NPC)",
+      "Unlock": "Unlock disposition",
+      "MemberOf": "Member of",
+      "LeaveFaction": "Remove from group",
+      "NoFactions": "Not a member of any group.",
+      "JoinFaction": "Add to group",
+      "Relations": "Individual relations",
+      "NoRelations": "No individual relations.",
+      "AddRelation": "Add relation"
+    },
+    "Disposition": {
+      "hostile": "Hostile",
+      "neutral": "Neutral",
+      "friendly": "Friendly"
+    },
+    "ActorType": {
+      "character": "Character",
+      "npc": "NPC",
+      "group": "Party",
+      "vehicle": "Vehicle",
+      "encounter": "Encounter"
+    },
+    "Benefits": {
+      "DMG3": "Recognition: a respected member; other members are Friendly by default and offer lodging and food in dire need. Possible perks: a reliable contact, a safe house or a discount on adventuring gear.",
+      "DMG10": "Possible perks: access to Potions and Scrolls, calling in a favor, or backup on dangerous missions.",
+      "DMG50": "Possible perks: calling on a small army, acquiring a Rare magic item, the help of a spellcaster, or assigning missions to lower-ranked members."
+    },
+    "Notify": {
+      "NoGM": "A GM must be connected to change renown.",
+      "Error": "Tidy Renown: the change could not be saved. See the console for details.",
+      "Recalculated": "Tidy Renown: {n} token(s) updated.",
+      "InvalidActor": "Only characters, parties and NPCs can be linked to a group.",
+      "GMOnly": "Only a GM can manage renown groups.",
+      "TidyMissing": "Tidy Renown requires Tidy 5e Sheets to be active. The module is disabled."
+    },
+    "Settings": {
+      "PlayersCanIncrease": {
+        "Name": "Players can increase renown",
+        "Hint": "Owners see a +1 button on their own entries. Each request is validated and applied by the GM. Players can never lower scores or create relations."
+      },
+      "AutoDisposition": {
+        "Name": "Automatic token disposition",
+        "Hint": "Module extension (not in the DMG): NPC tokens become Hostile or Friendly based on the party's score with their groups or with them directly."
+      },
+      "HostileThreshold": {
+        "Name": "Hostile threshold",
+        "Hint": "NPC tokens become Hostile when the party score is below this value."
+      },
+      "FriendlyThreshold": {
+        "Name": "Friendly threshold",
+        "Hint": "NPC tokens become Friendly when the party score is above this value."
+      },
+      "ShowNpcRelations": {
+        "Name": "Show NPC relations to players",
+        "Hint": "Players can see the Renown tab on NPC sheets they are allowed to open."
+      }
+    }
+  }
+}

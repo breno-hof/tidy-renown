@@ -1,0 +1,101 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+env:
+  MODULE_ID: tidy-renown
+  FOUNDRY_API: https://foundryvtt.com/_api/packages/release_version/
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Extrair versão da tag
+        id: meta
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          VERSION="${TAG#v}"
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.]+)?$ ]]; then
+            echo "::error::A tag '$TAG' não segue o formato vX.Y.Z"
+            exit 1
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Instalar dependências
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install --no-audit --no-fund; fi
+
+      - name: Verificar (tipos, lint, formatação, testes)
+        run: npm run check
+
+      - name: Build
+        run: npm run build
+
+      - name: Gerar module.json final
+        env:
+          VERSION: ${{ steps.meta.outputs.version }}
+          REPO_URL: https://github.com/${{ github.repository }}
+          MANIFEST: https://github.com/${{ github.repository }}/releases/latest/download/module.json
+          DOWNLOAD: https://github.com/${{ github.repository }}/releases/download/${{ steps.meta.outputs.tag }}/module.zip
+        run: |
+          jq --arg v "$VERSION" --arg m "$MANIFEST" --arg d "$DOWNLOAD" --arg u "$REPO_URL" \
+            '.version = $v | .manifest = $m | .download = $d
+             | .url = $u | .bugs = ($u + "/issues") | .readme = ($u + "#readme")' \
+            src/module.json > dist/module.json
+          cat dist/module.json
+
+      - name: Empacotar
+        run: |
+          cp LICENSE dist/ 2>/dev/null || true
+          cd dist && zip -r ../module.zip . -x '*.map'
+
+      - name: Anexar artefatos à Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ steps.meta.outputs.tag }}" dist/module.json module.zip --clobber
+
+      - name: Montar payload da Package Release API
+        env:
+          VERSION: ${{ steps.meta.outputs.version }}
+          # Manifest da versão específica (não o /latest), como exige a API.
+          RELEASE_MANIFEST: https://github.com/${{ github.repository }}/releases/download/${{ steps.meta.outputs.tag }}/module.json
+          NOTES: ${{ github.event.release.html_url }}
+        run: |
+          jq -n \
+            --arg id "$MODULE_ID" \
+            --arg v "$VERSION" \
+            --arg m "$RELEASE_MANIFEST" \
+            --arg n "$NOTES" \
+            --argjson c "$(jq '.compatibility | {minimum, verified, maximum: (.maximum // "")}' dist/module.json)" \
+            '{id: $id, release: {version: $v, manifest: $m, notes: $n, compatibility: $c}}' \
+            > payload.json
+          cat payload.json
+
+      - name: Validar no Foundry (dry-run)
+        env:
+          FOUNDRY_TOKEN: ${{ secrets.FOUNDRY_PACKAGE_TOKEN }}
+        run: |
+          if [ -z "$FOUNDRY_TOKEN" ]; then
+            echo "::error::Secret FOUNDRY_PACKAGE_TOKEN não configurado"
+            exit 1
+          fi
+          jq '. + {"dry-run": true}' payload.json > payload-dry.json
+          bash ./.github/scripts/foundry-release.sh payload-dry.json
+
+      - name: Publicar no Foundry
+        if: ${{ !github.event.release.prerelease }}
+        env:
+          FOUNDRY_TOKEN: ${{ secrets.FOUNDRY_PACKAGE_TOKEN }}
+        run: bash ./.github/scripts/foundry-release.sh payload.json

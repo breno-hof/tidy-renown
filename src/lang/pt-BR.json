@@ -1,0 +1,139 @@
+{
+  "TIDY_RENOWN": {
+    "TabTitle": "Renome",
+    "Tab": {
+      "PartyRenown": "renome do grupo",
+      "Manage": "Gerenciar",
+      "Empty": "Ainda sem renome com nenhum grupo.",
+      "EmptyGM": "Adicione um grupo abaixo ou use o gerenciador de facções.",
+      "Member": "Membro",
+      "NotMember": "Não membro",
+      "Cap": "Teto",
+      "Score": "Pontuação de Renome",
+      "RemoveMember": "Remover como membro",
+      "MakeMember": "Tornar membro",
+      "OpenFaction": "Abrir no gerenciador de facções",
+      "RemoveRelation": "Remover relação",
+      "Benefits": "Benefícios alcançados",
+      "Notes": "Notas do mestre…",
+      "AddFaction": "Adicionar grupo",
+      "NpcRelations": "Relações com NPCs",
+      "AddNpc": "Adicionar relação com NPC",
+      "IncreaseHint": "Pedir +1 de renome ao mestre",
+      "NextRank": "Próximo: {rank} em {score}",
+      "MissingNpc": "NPC excluído"
+    },
+    "Rank": {
+      "Unnamed": "Limiar {score}",
+      "MinScore": "Pontuação de Renome mínima",
+      "NamePlaceholder": "Rank ou título (opcional)",
+      "DescriptionPlaceholder": "Benefícios e outros pré-requisitos (texto livre)",
+      "Remove": "Remover rank"
+    },
+    "Faction": {
+      "Kind": {
+        "faction": "Facção",
+        "organization": "Organização",
+        "community": "Comunidade"
+      },
+      "NewName": "Novo grupo",
+      "Unnamed": "(sem nome)",
+      "Name": "Nome",
+      "KindLabel": "Tipo",
+      "Image": "Imagem",
+      "Color": "Cor de destaque",
+      "ProgressMax": "Escala da barra de progresso",
+      "ProgressMaxHint": "Apenas visual. O DMG cita 50 como o maior limiar de benefício.",
+      "Cap": "Teto da pontuação",
+      "CapHint": "Opcional. Deixe vazio para não ter teto (o DMG não define um).",
+      "Description": "Descrição"
+    },
+    "Manager": {
+      "Title": "Grupos de Renome",
+      "Open": "Abrir gerenciador",
+      "Hint": "Crie facções, organizações e comunidades, seus ranks e membros.",
+      "Button": "Renome",
+      "Intro": "Grupos rastreiam renome (DMG 2024). As listas de membros são calculadas a partir dos atores.",
+      "Recalc": "Recalcular disposição dos tokens",
+      "NewFaction": "Novo grupo",
+      "Counts": "{members} membros · {ranks} ranks",
+      "Empty": "Nenhum grupo ainda. Crie o primeiro.",
+      "Back": "Todos os grupos",
+      "Delete": "Excluir grupo",
+      "DeleteTitle": "Excluir grupo",
+      "DeleteConfirm": "Excluir <strong>{name}</strong>? As entradas de renome dele serão removidas de todos os atores.",
+      "Details": "Detalhes",
+      "Ranks": "Ranks e benefícios",
+      "RanksHint": "O DMG 2024 não define ranks padrão: defina seus próprios limiares. Um rank é alcançado na pontuação mínima; outros pré-requisitos são só texto.",
+      "UseDmgThresholds": "Usar limiares do DMG (3, 10, 50)",
+      "AddRank": "Adicionar rank",
+      "Members": "Membros e relações",
+      "DropHint": "Arraste atores da barra lateral para cá ou escolha um abaixo. Personagens e o grupo recebem pontuação; NPCs viram membros do grupo.",
+      "NpcMembers": "NPCs membros",
+      "NoMembers": "Ninguém está ligado a este grupo ainda.",
+      "AddActor": "Adicionar"
+    },
+    "Npc": {
+      "PartyScore": "Pontuação do grupo",
+      "NoStanding": "Fora da automação: sem grupos e sem relações individuais.",
+      "Thresholds": "Hostil abaixo de {hostile} · Amigável acima de {friendly}",
+      "AutoOff": "Disposição automática desligada",
+      "Lock": "Travar disposição (parar a automação deste NPC)",
+      "Unlock": "Destravar disposição",
+      "MemberOf": "Membro de",
+      "LeaveFaction": "Remover do grupo",
+      "NoFactions": "Não é membro de nenhum grupo.",
+      "JoinFaction": "Adicionar ao grupo",
+      "Relations": "Relações individuais",
+      "NoRelations": "Sem relações individuais.",
+      "AddRelation": "Adicionar relação"
+    },
+    "Disposition": {
+      "hostile": "Hostil",
+      "neutral": "Neutro",
+      "friendly": "Amigável"
+    },
+    "ActorType": {
+      "character": "Personagem",
+      "npc": "NPC",
+      "group": "Grupo",
+      "vehicle": "Veículo",
+      "encounter": "Encontro"
+    },
+    "Benefits": {
+      "DMG3": "Reconhecimento: membro respeitado; os outros membros são Amigáveis por padrão e oferecem abrigo e comida em caso de necessidade extrema. Vantagens possíveis: um contato confiável, um esconderijo ou desconto em equipamento de aventura.",
+      "DMG10": "Vantagens possíveis: acesso a Poções e Pergaminhos, pedir um favor ou receber apoio em missões perigosas.",
+      "DMG50": "Vantagens possíveis: convocar um pequeno exército, obter um item mágico Raro, contar com a ajuda de um conjurador ou atribuir missões a membros de status inferior."
+    },
+    "Notify": {
+      "NoGM": "Um mestre precisa estar conectado para alterar o renome.",
+      "Error": "Tidy Renown: não foi possível salvar a alteração. Veja o console para detalhes.",
+      "Recalculated": "Tidy Renown: {n} token(s) atualizado(s).",
+      "InvalidActor": "Apenas personagens, grupos e NPCs podem ser ligados a um grupo de renome.",
+      "GMOnly": "Apenas o mestre pode gerenciar os grupos de renome.",
+      "TidyMissing": "O Tidy Renown exige que o Tidy 5e Sheets esteja ativo. O módulo foi desativado."
+    },
+    "Settings": {
+      "PlayersCanIncrease": {
+        "Name": "Jogadores podem aumentar o renome",
+        "Hint": "Donos veem um botão +1 nas próprias entradas. Cada pedido é validado e aplicado pelo mestre. Jogadores nunca diminuem pontuações nem criam relações."
+      },
+      "AutoDisposition": {
+        "Name": "Disposição automática dos tokens",
+        "Hint": "Extensão do módulo (não está no DMG): tokens de NPCs ficam Hostis ou Amigáveis conforme a pontuação do grupo com os grupos deles ou com eles diretamente."
+      },
+      "HostileThreshold": {
+        "Name": "Limiar hostil",
+        "Hint": "Tokens de NPCs ficam Hostis quando a pontuação do grupo está abaixo deste valor."
+      },
+      "FriendlyThreshold": {
+        "Name": "Limiar amigável",
+        "Hint": "Tokens de NPCs ficam Amigáveis quando a pontuação do grupo está acima deste valor."
+      },
+      "ShowNpcRelations": {
+        "Name": "Mostrar relações de NPCs aos jogadores",
+        "Hint": "Jogadores veem a aba Renome nas fichas de NPC que podem abrir."
+      }
+    }
+  }
+}
