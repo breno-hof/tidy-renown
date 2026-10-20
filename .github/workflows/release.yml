@@ -83,19 +83,19 @@ jobs:
             > payload.json
           cat payload.json
 
-      - name: Validar no Foundry (dry-run)
-        env:
-          FOUNDRY_TOKEN: ${{ secrets.FOUNDRY_PACKAGE_TOKEN }}
-        run: |
-          if [ -z "$FOUNDRY_TOKEN" ]; then
-            echo "::error::Secret FOUNDRY_PACKAGE_TOKEN não configurado"
-            exit 1
-          fi
-          jq '. + {"dry-run": true}' payload.json > payload-dry.json
-          bash ./.github/scripts/foundry-release.sh payload-dry.json
+      # - name: Validar no Foundry (dry-run)
+      #   env:
+      #     FOUNDRY_TOKEN: ${{ secrets.FOUNDRY_PACKAGE_TOKEN }}
+      #   run: |
+      #     if [ -z "$FOUNDRY_TOKEN" ]; then
+      #       echo "::error::Secret FOUNDRY_PACKAGE_TOKEN não configurado"
+      #       exit 1
+      #     fi
+      #     jq '. + {"dry-run": true}' payload.json > payload-dry.json
+      #     bash ./.github/scripts/foundry-release.sh payload-dry.json
 
-      - name: Publicar no Foundry
-        if: ${{ !github.event.release.prerelease }}
-        env:
-          FOUNDRY_TOKEN: ${{ secrets.FOUNDRY_PACKAGE_TOKEN }}
-        run: bash ./.github/scripts/foundry-release.sh payload.json
+      # - name: Publicar no Foundry
+      #   if: ${{ !github.event.release.prerelease }}
+      #   env:
+      #     FOUNDRY_TOKEN: ${{ secrets.FOUNDRY_PACKAGE_TOKEN }}
+      #   run: bash ./.github/scripts/foundry-release.sh payload.json
