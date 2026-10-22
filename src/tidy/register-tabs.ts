@@ -21,7 +21,7 @@ export function registerTidyTabs(api: any): void {
       tabContentsClasses: [`${MODULE_ID}-tab`],
       getData: async (context: any) => {
         const actor = actorFrom(context);
-        return { ...context, tidyRenown: actor ? buildScoreHolderContext(actor) : null };
+        return { ...context, tidyRenown: actor ? await buildScoreHolderContext(actor) : null };
       },
       onRender: (params: any) => bindRenownControls(params.tabContentsElement, params.app),
     });

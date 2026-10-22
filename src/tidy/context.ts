@@ -49,43 +49,59 @@ function permissions(actor: any) {
 }
 
 /** Context for characters and the party (group) actor. */
-export function buildScoreHolderContext(actor: any) {
+export async function buildScoreHolderContext(actor: any) {
   const factions = getFactionMap();
   const relations = getRelations(actor);
   const perms = permissions(actor);
 
-  const factionCards = Object.entries(relations)
-    .filter(([key]) => isFactionKey(key) && factions.has(idFromKey(key)))
-    .map(([key, entry]) => {
-      const faction = factions.get(idFromKey(key))!;
-      const rank = getRank(faction.ranks, entry.score);
-      const next = getNextRank(faction.ranks, entry.score);
-      const progress = progressOf(entry.score, faction.progressMax);
-      return {
-        key,
-        id: faction.id,
-        name: faction.name,
-        img: faction.img,
-        color: faction.color,
-        kindLabel: kindLabel(faction),
-        score: entry.score,
-        member: !!entry.member,
-        notes: entry.notes ?? "",
-        cap: faction.cap,
-        progressMax: faction.progressMax,
-        progressPct: progress.pct,
-        negative: progress.negative,
-        rankName: rankLabel(rank),
-        nextLabel: next
-          ? t("TIDY_RENOWN.Tab.NextRank", { rank: rankLabel(next), score: next.minScore })
-          : "",
-        benefits: reachedRanks(faction.ranks, entry.score)
-          .filter((r) => r.description)
-          .map((r) => ({ name: rankLabel(r), description: r.description })),
-        atCap: faction.cap != null && entry.score >= faction.cap,
-      };
-    })
-    .sort((a, b) => a.name.localeCompare(b.name));
+  const factionCards = (
+    await Promise.all(
+      Object.entries(relations)
+        .filter(([key]) => isFactionKey(key) && factions.has(idFromKey(key)))
+        .map(async ([key, entry]) => {
+          const faction = factions.get(idFromKey(key))!;
+          const rank = getRank(faction.ranks, entry.score);
+          const next = getNextRank(faction.ranks, entry.score);
+          const progress = progressOf(entry.score, faction.progressMax);
+          const benefits = await Promise.all(
+            reachedRanks(faction.ranks, entry.score)
+              .filter((r) => r.description)
+              .map(async (r) => ({
+                name: rankLabel(r),
+                description: await foundry.applications.ux.TextEditor.enrichHTML(r.description, {
+                  secrets: game.user.isGM,
+                }),
+              })),
+          );
+          return {
+            key,
+            id: faction.id,
+            name: faction.name,
+            img: faction.img,
+            color: faction.color,
+            kindLabel: kindLabel(faction),
+            descriptionHtml: faction.description
+              ? await foundry.applications.ux.TextEditor.enrichHTML(faction.description, {
+                  secrets: game.user.isGM,
+                })
+              : "",
+            score: entry.score,
+            member: !!entry.member,
+            notes: entry.notes ?? "",
+            cap: faction.cap,
+            progressMax: faction.progressMax,
+            progressPct: progress.pct,
+            negative: progress.negative,
+            rankName: rankLabel(rank),
+            nextLabel: next
+              ? t("TIDY_RENOWN.Tab.NextRank", { rank: rankLabel(next), score: next.minScore })
+              : "",
+            benefits,
+            atCap: faction.cap != null && entry.score >= faction.cap,
+          };
+        }),
+    )
+  ).sort((a, b) => a.name.localeCompare(b.name));
 
   const npcRelations = Object.entries(relations)
     .filter(([key]) => isNpcKey(key))

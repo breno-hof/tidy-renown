@@ -45,9 +45,88 @@ function typeLabel(actor: any): string {
   return t(`TIDY_RENOWN.ActorType.${actor.type}`);
 }
 
+function folderLabel(actor: any): string {
+  return actor.folder?.name || t("TIDY_RENOWN.Manager.UnfiledActors");
+}
+
+function groupByFolder<T extends { folderId: string; folderName: string; name: string }>(
+  actors: T[],
+): { name: string; actors: T[] }[] {
+  const folders = new Map<string, { name: string; actors: T[] }>();
+  for (const actor of actors) {
+    const folder = folders.get(actor.folderId) ?? { name: actor.folderName, actors: [] };
+    folder.actors.push(actor);
+    folders.set(actor.folderId, folder);
+  }
+  for (const folder of folders.values()) {
+    folder.actors.sort((a, b) => a.name.localeCompare(b.name));
+  }
+  return [...folders.values()].sort((a, b) => a.name.localeCompare(b.name));
+}
+
 function getManagerClass(): any {
   if (ManagerClass) return ManagerClass;
   const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+
+  class RankEditorApp extends HandlebarsApplicationMixin(ApplicationV2) {
+    static DEFAULT_OPTIONS = {
+      id: `${MODULE_ID}-rank-editor`,
+      classes: [`${MODULE_ID}-manager`, `${MODULE_ID}-rank-editor`],
+      tag: "form",
+      window: { title: "TIDY_RENOWN.Manager.AddRankTitle", resizable: false },
+      position: { width: 480, height: "auto" },
+      form: { handler: RankEditorApp.#onSubmit, submitOnChange: false, closeOnSubmit: false },
+      actions: { cancel: RankEditorApp.#onCancel },
+    };
+
+    static PARTS = {
+      main: { template: TEMPLATES.rankEditor },
+    };
+
+    factionId: string;
+    manager: any;
+
+    constructor(factionId: string, manager: any) {
+      super({ id: `${MODULE_ID}-rank-editor-${factionId}` });
+      this.factionId = factionId;
+      this.manager = manager;
+    }
+
+    async _prepareContext(options: any): Promise<any> {
+      const context = await super._prepareContext(options);
+      const faction = getFaction(this.factionId);
+      const minScore = faction?.ranks.reduce((max, rank) => Math.max(max, rank.minScore), -1) ?? -1;
+      return { ...context, minScore: minScore + 1 };
+    }
+
+    static async #onSubmit(
+      this: RankEditorApp,
+      _event: Event,
+      _form: HTMLFormElement,
+      formData: any,
+    ) {
+      const faction = getFaction(this.factionId);
+      if (!faction) return;
+      const rankData = foundry.utils.expandObject(formData.object).rank ?? {};
+      const minScore = Number(rankData.minScore);
+      if (!Number.isFinite(minScore)) {
+        ui.notifications.warn(t("TIDY_RENOWN.Rank.InvalidScore"));
+        return;
+      }
+      const rank = newRank(
+        minScore,
+        String(rankData.name ?? ""),
+        String(rankData.description ?? ""),
+      );
+      await saveFaction({ ...faction, ranks: [...faction.ranks, rank] });
+      if (this.manager.selectedId === faction.id) this.manager.render();
+      await this.close();
+    }
+
+    static #onCancel(this: RankEditorApp) {
+      void this.close();
+    }
+  }
 
   class FactionManagerApp extends HandlebarsApplicationMixin(ApplicationV2) {
     static DEFAULT_OPTIONS = {
@@ -114,6 +193,8 @@ function getManagerClass(): any {
         actorId: r.actor.id,
         name: r.actor.name,
         img: r.actor.img,
+        folderId: r.actor.folder?.id ?? "",
+        folderName: folderLabel(r.actor),
         typeLabel: typeLabel(r.actor),
         score: r.entry.score,
         negative: r.entry.score < 0,
@@ -124,11 +205,18 @@ function getManagerClass(): any {
         actorId: a.id,
         name: a.name,
         img: a.img,
+        folderId: a.folder?.id ?? "",
+        folderName: folderLabel(a),
       }));
       const linked = new Set([...relations.map((r) => r.actorId), ...npcs.map((n) => n.actorId)]);
       const addable = game.actors
         .filter((a: any) => (isScoreHolder(a) || isNpc(a)) && !linked.has(a.id))
-        .map((a: any) => ({ id: a.id, name: `${a.name} (${typeLabel(a)})` }))
+        .map((a: any) => ({
+          id: a.id,
+          name: a.name,
+          folderId: a.folder?.id ?? "",
+          folderName: folderLabel(a),
+        }))
         .sort((a: any, b: any) => a.name.localeCompare(b.name));
 
       return {
@@ -140,11 +228,11 @@ function getManagerClass(): any {
         })),
         ranks: faction.ranks.map((r, i) => ({ ...r, index: i })),
         hasRanks: faction.ranks.length > 0,
-        relations,
+        relationFolders: groupByFolder(relations),
         hasRelations: relations.length > 0,
-        npcs,
+        npcFolders: groupByFolder(npcs),
         hasNpcs: npcs.length > 0,
-        addable,
+        addableFolders: groupByFolder(addable),
         quickDeltas: QUICK,
       };
     }
@@ -247,11 +335,11 @@ function getManagerClass(): any {
     }
 
     static async #onAddRank(this: FactionManagerApp) {
+      if (!this.selectedId) return;
       const faction = this.#factionFromForm();
       if (!faction) return;
-      const top = faction.ranks.at(-1)?.minScore ?? -1;
-      faction.ranks.push(newRank(top + 1));
       await saveFaction(faction);
+      new RankEditorApp(this.selectedId, this).render({ force: true });
     }
 
     static async #onRemoveRank(this: FactionManagerApp, _event: Event, target: HTMLElement) {

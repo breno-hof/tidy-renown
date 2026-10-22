@@ -27,7 +27,8 @@
       "Unnamed": "Limiar {score}",
       "MinScore": "Pontuação de Renome mínima",
       "NamePlaceholder": "Rank ou título (opcional)",
-      "DescriptionPlaceholder": "Benefícios e outros pré-requisitos (texto livre)",
+      "DescriptionPlaceholder": "Benefícios e outros pré-requisitos",
+      "InvalidScore": "Informe uma pontuação mínima válida para o rank.",
       "Remove": "Remover rank"
     },
     "Faction": {
@@ -67,11 +68,15 @@
       "RanksHint": "O DMG 2024 não define ranks padrão: defina seus próprios limiares. Um rank é alcançado na pontuação mínima; outros pré-requisitos são só texto.",
       "UseDmgThresholds": "Usar limiares do DMG (3, 10, 50)",
       "AddRank": "Adicionar rank",
+      "AddRankTitle": "Novo rank",
+      "RankEditorHint": "Defina o limiar e os benefícios deste rank.",
+      "Cancel": "Cancelar",
       "Members": "Membros e relações",
       "DropHint": "Arraste atores da barra lateral para cá ou escolha um abaixo. Personagens e o grupo recebem pontuação; NPCs viram membros do grupo.",
       "NpcMembers": "NPCs membros",
       "NoMembers": "Ninguém está ligado a este grupo ainda.",
-      "AddActor": "Adicionar"
+      "AddActor": "Adicionar",
+      "UnfiledActors": "Sem pasta"
     },
     "Npc": {
       "PartyScore": "Pontuação do grupo",

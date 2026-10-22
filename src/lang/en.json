@@ -27,7 +27,8 @@
       "Unnamed": "Threshold {score}",
       "MinScore": "Minimum Renown Score",
       "NamePlaceholder": "Rank or title (optional)",
-      "DescriptionPlaceholder": "Benefits and other prerequisites (free text)",
+      "DescriptionPlaceholder": "Benefits and other prerequisites",
+      "InvalidScore": "Enter a valid minimum score for this rank.",
       "Remove": "Remove rank"
     },
     "Faction": {
@@ -67,11 +68,15 @@
       "RanksHint": "The DMG 2024 defines no default ranks: set your own thresholds. A rank is reached at its minimum score; other prerequisites are just text.",
       "UseDmgThresholds": "Use DMG thresholds (3, 10, 50)",
       "AddRank": "Add rank",
+      "AddRankTitle": "New rank",
+      "RankEditorHint": "Set the threshold and benefits for this rank.",
+      "Cancel": "Cancel",
       "Members": "Members and relations",
       "DropHint": "Drag actors here from the sidebar, or pick one below. Characters and the party get a score; NPCs become group members.",
       "NpcMembers": "NPC members",
       "NoMembers": "Nobody is linked to this group yet.",
-      "AddActor": "Add"
+      "AddActor": "Add",
+      "UnfiledActors": "Unfiled"
     },
     "Npc": {
       "PartyScore": "Party score",

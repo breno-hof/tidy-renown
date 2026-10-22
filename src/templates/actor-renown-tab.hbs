@@ -47,6 +47,13 @@
         {{#if cap}}<span class="tr-muted">{{localize "TIDY_RENOWN.Tab.Cap"}}: {{cap}}</span>{{/if}}
       </div>
 
+      {{#if descriptionHtml}}
+        <details class="tr-faction-description">
+          <summary>{{localize "TIDY_RENOWN.Faction.Description"}}</summary>
+          <div class="tr-rich-text">{{{descriptionHtml}}}</div>
+        </details>
+      {{/if}}
+
       {{#if ../isGM}}
         <div class="tr-controls">
           {{#each ../quickDeltas}}
@@ -74,7 +81,7 @@
           <summary>{{localize "TIDY_RENOWN.Tab.Benefits"}} ({{benefits.length}})</summary>
           <ul>
             {{#each benefits}}
-              <li><strong>{{name}}:</strong> {{description}}</li>
+              <li><strong>{{name}}:</strong> {{{description}}}</li>
             {{/each}}
           </ul>
         </details>

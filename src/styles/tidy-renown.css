@@ -268,6 +268,25 @@
   padding-inline-start: 1.25rem;
 }
 
+.tidy-renown-tab .tr-faction-description summary {
+  cursor: pointer;
+  color: var(--tr-muted);
+  font-size: 0.85rem;
+}
+
+.tidy-renown-tab .tr-rich-text {
+  margin-block-start: 0.25rem;
+  font-size: 0.9em;
+}
+
+.tidy-renown-tab .tr-rich-text > :first-child {
+  margin-block-start: 0;
+}
+
+.tidy-renown-tab .tr-rich-text > :last-child {
+  margin-block-end: 0;
+}
+
 .tidy-renown-tab .tr-notes {
   inline-size: 100%;
   min-block-size: 1.75rem;
@@ -434,6 +453,43 @@
   inline-size: auto;
 }
 
+.tidy-renown-manager fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--tr-border);
+  border-radius: var(--tr-radius);
+}
+
+.tidy-renown-manager fieldset > legend {
+  padding-inline: 0.25rem;
+  font-weight: 600;
+}
+
+.tidy-renown-manager .tr-faction-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem 0.75rem;
+}
+
+.tidy-renown-manager .tr-faction-fields .form-group {
+  margin: 0;
+}
+
+.tidy-renown-manager .tr-rich-field {
+  grid-column: 1 / -1;
+}
+
+.tidy-renown-manager .tr-rich-field prose-mirror {
+  min-block-size: 6rem;
+  border: 1px solid var(--tr-border);
+  border-radius: var(--tr-radius);
+  background: var(--tr-field);
+}
+
 .tidy-renown-manager .tr-faction-list {
   display: flex;
   flex-direction: column;
@@ -479,8 +535,55 @@
 }
 
 .tidy-renown-manager .tr-rank-desc {
+  min-block-size: 5rem;
+  border: 1px solid var(--tr-border);
+  border-radius: var(--tr-radius);
+  background: var(--tr-field);
+}
+
+.tidy-renown-manager .tr-rank-description {
   grid-column: 1 / -1;
-  resize: vertical;
+}
+
+.tidy-renown-manager .tr-rank-description summary {
+  cursor: pointer;
+  color: var(--tr-muted);
+  font-size: 0.85em;
+}
+
+.tidy-renown-manager .tr-rank-description prose-mirror {
+  margin-block-start: 0.25rem;
+}
+
+.tidy-renown-manager .tr-folder + .tr-folder {
+  margin-block-start: 0.5rem;
+}
+
+.tidy-renown-manager .tr-folder-title {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  margin: 0.375rem 0 0.125rem;
+  color: var(--tr-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.tidy-renown-manager .tr-rank-editor-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem;
+}
+
+.tidy-renown-manager .tr-rank-editor-body .form-group {
+  margin: 0;
+}
+
+.tidy-renown-manager .tr-rank-editor-body .form-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.375rem;
 }
 
 .tidy-renown-manager .tr-icon-button {
@@ -510,6 +613,22 @@
 
 .tidy-renown-manager .tr-negative .tr-score-input {
   color: var(--tr-danger);
+}
+
+@media (max-width: 520px) {
+  .tidy-renown-manager .tr-faction-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tidy-renown-manager .tr-row {
+    flex-wrap: wrap;
+  }
+
+  .tidy-renown-manager .tr-row-controls {
+    flex-basis: 100%;
+    justify-content: flex-end;
+    margin-inline-start: auto;
+  }
 }
 
 /* Actor directory button */
