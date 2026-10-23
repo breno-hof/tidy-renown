@@ -20,7 +20,7 @@
             {{#each actors}}
               <li data-filter-text="{{filterText}}">
                 <label class="tr-row tr-pick">
-                  <input type="checkbox" name="actorIds" value="{{id}}" />
+                  <input type="checkbox" data-tr-pick value="{{id}}" />
                   <img class="tr-row-img" src="{{img}}" alt="" />
                   <span class="tr-row-name">{{name}}</span>
                   <span class="tr-muted">{{typeLabel}}</span>

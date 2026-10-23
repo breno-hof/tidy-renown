@@ -83,9 +83,20 @@
             </dl>
           {{/if}}
           {{#if ../isGM}}
-            <textarea class="tr-notes" rows="2" placeholder="{{localize "TIDY_RENOWN.Tab.Notes"}}" data-tr-notes data-key="{{key}}">{{notes}}</textarea>
-          {{else if notes}}
-            <p class="tr-notes-text">{{notes}}</p>
+            <div class="tr-notes">
+              <div class="tr-notes-head">
+                <h5 class="tr-subheading">{{localize "TIDY_RENOWN.Notes.Label"}}</h5>
+                <button type="button" class="button button-icon-only button-borderless" data-tr-action="edit-notes" data-key="{{key}}" data-tooltip="{{localize "TIDY_RENOWN.Notes.Edit"}}" aria-label="{{localize "TIDY_RENOWN.Notes.Edit"}}">
+                  <i class="fa-solid fa-pen" inert></i>
+                </button>
+              </div>
+              {{#if notesHtml}}<div class="tr-rich-text">{{{notesHtml}}}</div>{{else}}<p class="tr-muted">{{localize "TIDY_RENOWN.Notes.Empty"}}</p>{{/if}}
+            </div>
+          {{else if notesHtml}}
+            <div class="tr-notes">
+              <h5 class="tr-subheading">{{localize "TIDY_RENOWN.Notes.Label"}}</h5>
+              <div class="tr-rich-text">{{{notesHtml}}}</div>
+            </div>
           {{/if}}
         </details>
       {{/if}}

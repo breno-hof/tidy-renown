@@ -1,4 +1,5 @@
 /** View models for the Renown tabs (RF-04). Strings are resolved here, templates stay dumb. */
+import { notesToHtml } from "../apps/NotesEditorApp.js";
 import { SETTINGS } from "../constants.js";
 import { getFactionMap, getFactions } from "../data/factions.js";
 import { groupByFolder } from "../data/folders.js";
@@ -84,7 +85,11 @@ export async function buildScoreHolderContext(actor: any) {
                 secrets: game.user.isGM,
               })
             : "";
-          const notes = entry.notes ?? "";
+          const notesHtml = entry.notes
+            ? await foundry.applications.ux.TextEditor.enrichHTML(notesToHtml(entry.notes), {
+                secrets: game.user.isGM,
+              })
+            : "";
           return {
             key,
             id: faction.id,
@@ -95,8 +100,8 @@ export async function buildScoreHolderContext(actor: any) {
             descriptionHtml,
             score: entry.score,
             member: !!entry.member,
-            notes,
-            hasDetails: !!descriptionHtml || benefits.length > 0 || !!notes || perms.isGM,
+            notesHtml,
+            hasDetails: !!descriptionHtml || benefits.length > 0 || !!notesHtml || perms.isGM,
             cap: faction.cap,
             progressMax: faction.progressMax,
             progressPct: progress.pct,

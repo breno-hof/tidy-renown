@@ -4,6 +4,7 @@ import {
   canPlayerIncrease,
   clampScore,
   dispositionFor,
+  duplicateRankScores,
   getNextRank,
   getRank,
   normalizeFaction,
@@ -177,5 +178,13 @@ describe("normalizeFaction", () => {
         ["r2", 10],
       ],
     );
+  });
+});
+
+describe("duplicateRankScores", () => {
+  it("lists minimum scores shared by more than one rank", () => {
+    assert.deepEqual([...duplicateRankScores(ranks)], []);
+    const dupes = duplicateRankScores([...ranks, { id: "d", name: "Again", minScore: 10 }]);
+    assert.deepEqual([...dupes], [10]);
   });
 });

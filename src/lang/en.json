@@ -14,7 +14,6 @@
       "OpenFaction": "Open in the faction manager",
       "RemoveRelation": "Remove relation",
       "Benefits": "Benefits reached",
-      "Notes": "GM notes…",
       "AddFaction": "Add group",
       "NpcRelations": "Relations with NPCs",
       "AddNpc": "Add NPC relation",
@@ -36,7 +35,9 @@
       "Name": "Name",
       "Benefits": "Benefits",
       "Edit": "Edit rank",
-      "RemoveConfirm": "Remove the rank <strong>{name}</strong>?"
+      "RemoveConfirm": "Remove the rank <strong>{name}</strong>?",
+      "DuplicateScore": "Another rank already starts at {score}. Use a different minimum score.",
+      "DuplicateWarning": "Some ranks share the same minimum score; only one of them is ever reached. Edit one of the highlighted ranks."
     },
     "Faction": {
       "Kind": {
@@ -66,7 +67,6 @@
       "NewFaction": "New group",
       "Counts": "{members} members · {ranks} ranks",
       "Empty": "No groups yet. Create the first one.",
-      "Back": "All groups",
       "Delete": "Delete group",
       "DeleteTitle": "Delete group",
       "DeleteConfirm": "Delete <strong>{name}</strong>? Its renown entries will be removed from every actor.",
@@ -155,6 +155,23 @@
         "Name": "Show NPC relations to players",
         "Hint": "Players can see the Renown tab on NPC sheets they are allowed to open."
       }
+    },
+    "Notes": {
+      "Title": "Notes: {actor} · {target}",
+      "Label": "GM notes",
+      "Edit": "Edit notes",
+      "Empty": "No notes yet.",
+      "Hint": "Players who own the actor can read these notes. Use a Secret block for text only the GM sees."
+    },
+    "Bulk": {
+      "Selected": "{n} selected",
+      "AdjustHint": "Add or subtract this amount for every selected actor",
+      "Amount": "Amount",
+      "Add": "Add to the selected",
+      "Subtract": "Subtract from the selected",
+      "MakeMembers": "Make the selected members",
+      "RemoveMembers": "Remove membership of the selected",
+      "Clear": "Clear selection"
     }
   }
 }

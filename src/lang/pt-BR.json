@@ -14,7 +14,6 @@
       "OpenFaction": "Abrir no gerenciador de facções",
       "RemoveRelation": "Remover relação",
       "Benefits": "Benefícios alcançados",
-      "Notes": "Notas do mestre…",
       "AddFaction": "Adicionar grupo",
       "NpcRelations": "Relações com NPCs",
       "AddNpc": "Adicionar relação com NPC",
@@ -36,7 +35,9 @@
       "Name": "Nome",
       "Benefits": "Benefícios",
       "Edit": "Editar rank",
-      "RemoveConfirm": "Remover o rank <strong>{name}</strong>?"
+      "RemoveConfirm": "Remover o rank <strong>{name}</strong>?",
+      "DuplicateScore": "Já existe um rank que começa em {score}. Use outra pontuação mínima.",
+      "DuplicateWarning": "Alguns ranks têm a mesma pontuação mínima; só um deles é alcançado. Edite um dos ranks destacados."
     },
     "Faction": {
       "Kind": {
@@ -66,7 +67,6 @@
       "NewFaction": "Novo grupo",
       "Counts": "{members} membros · {ranks} ranks",
       "Empty": "Nenhum grupo ainda. Crie o primeiro.",
-      "Back": "Todos os grupos",
       "Delete": "Excluir grupo",
       "DeleteTitle": "Excluir grupo",
       "DeleteConfirm": "Excluir <strong>{name}</strong>? As entradas de renome dele serão removidas de todos os atores.",
@@ -155,6 +155,23 @@
         "Name": "Mostrar relações de NPCs aos jogadores",
         "Hint": "Jogadores veem a aba Renome nas fichas de NPC que podem abrir."
       }
+    },
+    "Notes": {
+      "Title": "Notas: {actor} · {target}",
+      "Label": "Notas do mestre",
+      "Edit": "Editar notas",
+      "Empty": "Sem notas.",
+      "Hint": "Jogadores donos do ator podem ler estas notas. Use um bloco Secreto para texto que só o mestre vê."
+    },
+    "Bulk": {
+      "Selected": "{n} selecionado(s)",
+      "AdjustHint": "Somar ou subtrair este valor de todos os atores selecionados",
+      "Amount": "Valor",
+      "Add": "Somar aos selecionados",
+      "Subtract": "Subtrair dos selecionados",
+      "MakeMembers": "Tornar os selecionados membros",
+      "RemoveMembers": "Remover os selecionados como membros",
+      "Clear": "Limpar seleção"
     }
   }
 }

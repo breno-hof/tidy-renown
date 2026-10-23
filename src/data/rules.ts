@@ -29,6 +29,17 @@ export function sortRanks(ranks: readonly RankDef[]): RankDef[] {
   return [...ranks].sort((a, b) => a.minScore - b.minScore);
 }
 
+/** Minimum scores used by more than one rank (ambiguous: only one of them is ever "current"). */
+export function duplicateRankScores(ranks: readonly RankDef[]): Set<number> {
+  const seen = new Set<number>();
+  const dupes = new Set<number>();
+  for (const rank of ranks) {
+    if (seen.has(rank.minScore)) dupes.add(rank.minScore);
+    seen.add(rank.minScore);
+  }
+  return dupes;
+}
+
 /** Current rank: highest minScore <= score (2.3). */
 export function getRank(ranks: readonly RankDef[], score: number): RankDef | null {
   let current: RankDef | null = null;

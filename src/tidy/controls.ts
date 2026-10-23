@@ -3,6 +3,7 @@
  * `data-action`) so ApplicationV2 does not try to route the clicks.
  */
 import { openFactionManager } from "../apps/FactionManagerApp.js";
+import { openNotesEditor } from "../apps/NotesEditorApp.js";
 import {
   addNpcToFaction,
   adjustScore,
@@ -10,7 +11,6 @@ import {
   removeNpcFromFaction,
   removeRelation,
   setMember,
-  setNotes,
   setScore,
 } from "../data/renown.js";
 import { factionKey, npcKey } from "../data/rules.js";
@@ -77,19 +77,15 @@ export function bindRenownControls(root: HTMLElement | null | undefined, app: an
   });
 
   root.addEventListener("change", (event) => {
-    const el = event.target as HTMLInputElement | HTMLTextAreaElement;
-    if (!el.matches("[data-tr-score], [data-tr-notes], [data-tr-select]")) return;
+    const el = event.target as HTMLInputElement;
+    if (!el.matches("[data-tr-score], [data-tr-select]")) return;
     // Keep our controls out of the sheet's own form submission.
     event.stopPropagation();
     if (!game.user.isGM || el.matches("[data-tr-select]")) return;
     const actor = targetActor(el, root, sheetActor(app));
     const key = el.dataset.key;
     if (!actor || !key) return;
-    if (el.matches("[data-tr-score]")) {
-      void guarded(() => setScore(actor, key, Number(el.value)));
-    } else if (el.matches("[data-tr-notes]")) {
-      void guarded(() => setNotes(actor, key, el.value));
-    }
+    void guarded(() => setScore(actor, key, Number(el.value)));
   });
 }
 
@@ -121,6 +117,9 @@ async function onAction(el: HTMLElement, root: HTMLElement, sheet: any): Promise
       return guarded(() => setMember(actor, factionId, el.dataset.member !== "true"));
     case "remove":
       return guarded(() => removeRelation(actor, key));
+    case "edit-notes":
+      openNotesEditor(actor, key);
+      return;
     case "add-faction": {
       const id = selectedValue(root, "faction");
       if (id) return guarded(() => ensureRelation(sheet, factionKey(id), { member: true }));
