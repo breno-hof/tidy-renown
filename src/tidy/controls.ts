@@ -19,6 +19,9 @@ import { requestIncrease } from "../services/socket.js";
 
 const BOUND = "trBound";
 
+/** Open "details" sections per actor, so re-renders after a score change keep them open. */
+const openDetails = new Set<string>();
+
 function sheetActor(app: any): any {
   return app?.actor ?? app?.document ?? null;
 }
@@ -44,8 +47,26 @@ function selectedValue(root: HTMLElement, name: string): string {
 }
 
 export function bindRenownControls(root: HTMLElement | null | undefined, app: any): void {
-  if (!root || root.dataset[BOUND]) return;
+  if (!root) return;
+  const actorId = sheetActor(app)?.id ?? "";
+  for (const details of root.querySelectorAll<HTMLDetailsElement>("details[data-tr-details]")) {
+    if (openDetails.has(`${actorId}:${details.dataset.trDetails}`)) details.open = true;
+  }
+  if (root.dataset[BOUND]) return;
   root.dataset[BOUND] = "1";
+
+  // `toggle` does not bubble, so listen in the capture phase.
+  root.addEventListener(
+    "toggle",
+    (event) => {
+      const details = event.target as HTMLElement;
+      if (!(details instanceof HTMLDetailsElement) || !details.dataset.trDetails) return;
+      const id = `${sheetActor(app)?.id ?? ""}:${details.dataset.trDetails}`;
+      if (details.open) openDetails.add(id);
+      else openDetails.delete(id);
+    },
+    true,
+  );
 
   root.addEventListener("click", (event) => {
     const button = (event.target as HTMLElement).closest<HTMLElement>("[data-tr-action]");

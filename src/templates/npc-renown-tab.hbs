@@ -72,17 +72,17 @@
         <li class="tr-row{{#if negative}} tr-negative{{/if}}" data-actor-id="{{actorId}}">
           <img class="tr-row-img" src="{{img}}" alt="" />
           <a class="tr-row-name" data-tr-action="open-actor" data-open-id="{{actorId}}">{{name}}</a>
-          <span class="tr-score{{#if negative}} tr-score-neg{{/if}}">{{score}}</span>
           {{#if ../isGM}}
-            <span class="tr-row-controls">
-              {{#each ../quickDeltas}}
-                <button type="button" class="button tr-delta tr-delta-sm{{#if negative}} tr-delta-neg{{/if}}" data-tr-action="adjust" data-key="{{../key}}" data-delta="{{delta}}">{{label}}</button>
-              {{/each}}
-              <input type="number" class="tr-score-input" step="1" value="{{score}}" data-tr-score data-key="{{key}}" aria-label="{{localize "TIDY_RENOWN.Tab.Score"}}" />
-              <button type="button" class="button button-icon-only button-borderless tr-danger" data-tr-action="remove" data-key="{{key}}" data-tooltip="{{localize "TIDY_RENOWN.Tab.RemoveRelation"}}">
-                <i class="fa-solid fa-trash" inert></i>
-              </button>
+            <span class="tr-stepper">
+              <button type="button" class="button" data-tr-action="adjust" data-key="{{key}}" data-delta="-1" aria-label="−1">−</button>
+              <input type="number" step="1" value="{{score}}" data-tr-score data-key="{{key}}" aria-label="{{localize "TIDY_RENOWN.Tab.Score"}}" />
+              <button type="button" class="button" data-tr-action="adjust" data-key="{{key}}" data-delta="1" aria-label="+1">+</button>
             </span>
+            <button type="button" class="button button-icon-only button-borderless tr-danger" data-tr-action="remove" data-key="{{key}}" data-tooltip="{{localize "TIDY_RENOWN.Tab.RemoveRelation"}}">
+              <i class="fa-solid fa-xmark" inert></i>
+            </button>
+          {{else}}
+            <span class="tr-score{{#if negative}} tr-score-neg{{/if}}">{{score}}</span>
           {{/if}}
         </li>
       {{/each}}
@@ -92,10 +92,14 @@
   {{/if}}
 
   {{#if isGM}}
-    {{#if availableCharacters.length}}
+    {{#if availableCharacterFolders.length}}
       <div class="tr-add-row">
         <select data-tr-select="character" aria-label="{{localize "TIDY_RENOWN.Npc.AddRelation"}}">
-          {{#each availableCharacters}}<option value="{{id}}">{{name}}</option>{{/each}}
+          {{#each availableCharacterFolders}}
+            <optgroup label="{{name}}">
+              {{#each actors}}<option value="{{id}}">{{name}}</option>{{/each}}
+            </optgroup>
+          {{/each}}
         </select>
         <button type="button" class="button" data-tr-action="npc-add-relation" data-npc-id="{{npcId}}">
           <i class="fa-solid fa-plus" inert></i> {{localize "TIDY_RENOWN.Npc.AddRelation"}}

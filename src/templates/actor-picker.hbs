@@ -1,0 +1,41 @@
+<div class="tr-dialog">
+<div class="tr-dialog-body tr-picker">
+  {{#if empty}}
+    <div class="tr-empty">
+      <i class="fa-solid fa-users" inert></i>
+      <p>{{localize "TIDY_RENOWN.Picker.Empty"}}</p>
+    </div>
+  {{else}}
+    <input type="search" class="tr-search" data-tr-filter placeholder="{{localize "TIDY_RENOWN.Manager.Search"}}" aria-label="{{localize "TIDY_RENOWN.Manager.Search"}}" />
+    <div class="tr-picker-list">
+      {{#each folders}}
+        <details class="tr-folder" open>
+          <summary class="tr-folder-title">
+            <input type="checkbox" data-tr-folder-all aria-label="{{localize "TIDY_RENOWN.Picker.SelectFolder"}}" />
+            <i class="fa-solid fa-folder tr-folder-closed" inert></i><i class="fa-solid fa-folder-open tr-folder-opened" inert></i>
+            <span>{{name}}</span>
+            <span class="tr-count">{{actors.length}}</span>
+          </summary>
+          <ul class="tr-rows">
+            {{#each actors}}
+              <li data-filter-text="{{filterText}}">
+                <label class="tr-row tr-pick">
+                  <input type="checkbox" name="actorIds" value="{{id}}" />
+                  <img class="tr-row-img" src="{{img}}" alt="" />
+                  <span class="tr-row-name">{{name}}</span>
+                  <span class="tr-muted">{{typeLabel}}</span>
+                </label>
+              </li>
+            {{/each}}
+          </ul>
+        </details>
+      {{/each}}
+    </div>
+    <p class="hint">{{localize "TIDY_RENOWN.Picker.Hint"}}</p>
+  {{/if}}
+</div>
+<footer class="form-footer tr-dialog-footer">
+  <button type="button" data-action="cancel">{{localize "TIDY_RENOWN.Manager.Cancel"}}</button>
+  {{#unless empty}}<button type="submit" class="tr-primary" disabled><i class="fa-solid fa-user-plus" inert></i> <span></span></button>{{/unless}}
+</footer>
+</div>

@@ -7,7 +7,6 @@
       "Empty": "Ainda sem renome com nenhum grupo.",
       "EmptyGM": "Adicione um grupo abaixo ou use o gerenciador de facções.",
       "Member": "Membro",
-      "NotMember": "Não membro",
       "Cap": "Teto",
       "Score": "Pontuação de Renome",
       "RemoveMember": "Remover como membro",
@@ -21,15 +20,23 @@
       "AddNpc": "Adicionar relação com NPC",
       "IncreaseHint": "Pedir +1 de renome ao mestre",
       "NextRank": "Próximo: {rank} em {score}",
-      "MissingNpc": "NPC excluído"
+      "MissingNpc": "NPC excluído",
+      "Details": "Detalhes",
+      "BenefitsCount": "{n} benefício(s)"
     },
     "Rank": {
       "Unnamed": "Limiar {score}",
       "MinScore": "Pontuação de Renome mínima",
       "NamePlaceholder": "Rank ou título (opcional)",
-      "DescriptionPlaceholder": "Benefícios e outros pré-requisitos",
+      "DescriptionPlaceholder": "Benefícios e outros pré-requisitos. Só texto: nada é automatizado.",
       "InvalidScore": "Informe uma pontuação mínima válida para o rank.",
-      "Remove": "Remover rank"
+      "Remove": "Remover rank",
+      "NewTitle": "Novo rank",
+      "EditTitle": "Editar rank",
+      "Name": "Nome",
+      "Benefits": "Benefícios",
+      "Edit": "Editar rank",
+      "RemoveConfirm": "Remover o rank <strong>{name}</strong>?"
     },
     "Faction": {
       "Kind": {
@@ -64,19 +71,28 @@
       "DeleteTitle": "Excluir grupo",
       "DeleteConfirm": "Excluir <strong>{name}</strong>? As entradas de renome dele serão removidas de todos os atores.",
       "Details": "Detalhes",
-      "Ranks": "Ranks e benefícios",
+      "Ranks": "Ranks",
       "RanksHint": "O DMG 2024 não define ranks padrão: defina seus próprios limiares. Um rank é alcançado na pontuação mínima; outros pré-requisitos são só texto.",
       "UseDmgThresholds": "Usar limiares do DMG (3, 10, 50)",
       "AddRank": "Adicionar rank",
-      "AddRankTitle": "Novo rank",
-      "RankEditorHint": "Defina o limiar e os benefícios deste rank.",
       "Cancel": "Cancelar",
-      "Members": "Membros e relações",
-      "DropHint": "Arraste atores da barra lateral para cá ou escolha um abaixo. Personagens e o grupo recebem pontuação; NPCs viram membros do grupo.",
-      "NpcMembers": "NPCs membros",
+      "Members": "Membros",
+      "DropHint": "Dica: você também pode arrastar atores da barra lateral para esta aba. Personagens e o grupo recebem pontuação; NPCs viram membros do grupo.",
       "NoMembers": "Ninguém está ligado a este grupo ainda.",
-      "AddActor": "Adicionar",
-      "UnfiledActors": "Sem pasta"
+      "UnfiledActors": "Sem pasta",
+      "Save": "Salvar",
+      "Advanced": "Barra de progresso e teto",
+      "NoRanks": "Nenhum rank ainda. Adicione um ou comece pelos limiares do DMG.",
+      "Search": "Buscar pelo nome…",
+      "AddActors": "Adicionar atores",
+      "NpcMember": "NPC · membro"
+    },
+    "Picker": {
+      "Title": "Adicionar atores",
+      "Add": "Adicionar ({n})",
+      "Empty": "Todos os atores elegíveis já estão ligados a este grupo.",
+      "SelectFolder": "Selecionar a pasta inteira",
+      "Hint": "Personagens e o grupo recebem pontuação; NPCs viram membros."
     },
     "Npc": {
       "PartyScore": "Pontuação do grupo",

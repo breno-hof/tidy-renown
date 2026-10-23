@@ -24,6 +24,7 @@ export const SETTINGS = {
 export const TEMPLATES = {
   manager: `modules/${MODULE_ID}/templates/faction-manager.hbs`,
   rankEditor: `modules/${MODULE_ID}/templates/rank-editor.hbs`,
+  actorPicker: `modules/${MODULE_ID}/templates/actor-picker.hbs`,
   actorTab: `modules/${MODULE_ID}/templates/actor-renown-tab.hbs`,
   npcTab: `modules/${MODULE_ID}/templates/npc-renown-tab.hbs`,
 } as const;

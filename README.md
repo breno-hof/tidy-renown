@@ -9,8 +9,9 @@ A especificação completa está em [`SPEC.md`](SPEC.md).
 
 - **Grupos** (facção, organização ou comunidade) com descrição, imagem, cor, escala da barra, teto
   opcional e ranks próprios. O botão "Usar limiares do DMG" cria os limiares 3, 10 e 50 com os
-  benefícios sugeridos pelo livro (só texto, sem automação). Descrições de grupos e ranks usam o
-  editor formatado do Foundry; novos ranks são criados em uma janela própria.
+  benefícios sugeridos pelo livro (só texto, sem automação). O gerenciador é dividido em abas
+  (Detalhes, Ranks, Membros); descrições usam o editor formatado do Foundry e ranks são criados e
+  editados em uma janela própria.
 - **Renome por personagem ou pela party** (ator `group` do dnd5e), separado por grupo. Membros
   nunca ficam abaixo de 0 (regra do DMG); não membros e relações individuais com NPCs podem ficar
   negativos (extensão do módulo).
@@ -28,8 +29,8 @@ A especificação completa está em [`SPEC.md`](SPEC.md).
 1. Abra o gerenciador pelo botão **Renome** no diretório de atores, pelas configurações do módulo
    ou pelo botão **Gerenciar** na aba Renome.
 2. Clique em **Novo grupo**, dê um nome e, se quiser, **Usar limiares do DMG**.
-3. Arraste personagens, a party ou NPCs para a área de membros (ou escolha na lista, organizada por
-   pasta) e ajuste a pontuação com os botões ou o campo numérico.
+3. Na aba **Membros**, clique em **Adicionar atores** (seletor organizado por pasta, com busca e
+   seleção da pasta inteira) ou arraste atores da barra lateral; ajuste a pontuação com − / +.
 
 API para macros: `game.modules.get("tidy-renown").api` expõe `openManager`, `getFactions`,
 `getMembers`, `getRelations`, `computeNpcStanding` e `recalculateDispositions`.

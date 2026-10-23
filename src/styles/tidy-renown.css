@@ -16,18 +16,12 @@
   --tr-border: var(--t5e-component-field-border, var(--color-border, currentColor));
   --tr-field: var(--t5e-component-field-background, transparent);
   --tr-track: color-mix(in srgb, var(--tr-text) 12%, transparent);
+  --tr-hover: color-mix(in srgb, var(--tr-text) 6%, transparent);
   --tr-danger: var(--t5e-warning-accent-color, var(--color-level-error, currentColor));
   --tr-success: var(--color-level-success, var(--tr-gold));
   --tr-radius: var(--t5e-component-card-radius, 0.375rem);
   --tr-gap: var(--t5e-size-2x, 0.5rem);
   color: var(--tr-text);
-}
-
-.tidy-renown-tab .tr-tab {
-  display: flex;
-  flex-direction: column;
-  gap: var(--tr-gap);
-  padding: var(--tr-gap);
 }
 
 /* ---------- Shared bits ---------- */
@@ -43,24 +37,7 @@
   color: var(--tr-danger);
 }
 
-.tidy-renown-tab .tr-tab-header,
-.tidy-renown-manager .tr-manager-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--tr-gap);
-}
-
-.tidy-renown-tab .tr-title {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  font-size: 1.1rem;
-}
-
-.tidy-renown-tab .tr-section-title,
-.tidy-renown-manager .tr-section-title {
+.tidy-renown-tab .tr-section-title {
   margin: 0.5rem 0 0;
   font-size: 0.95rem;
   border-bottom: 1px solid var(--tr-border);
@@ -75,6 +52,7 @@
   gap: 0.25rem;
   padding: 1.5rem 1rem;
   text-align: center;
+  color: var(--tr-muted);
   border: 1px dashed var(--tr-border);
   border-radius: var(--tr-radius);
 }
@@ -82,7 +60,6 @@
 .tidy-renown-tab .tr-empty > i,
 .tidy-renown-manager .tr-empty > i {
   font-size: 1.75rem;
-  color: var(--tr-muted);
 }
 
 .tidy-renown-tab .tr-empty p,
@@ -90,8 +67,7 @@
   margin: 0;
 }
 
-.tidy-renown-tab .tr-pill,
-.tidy-renown-manager .tr-pill {
+.tidy-renown-tab .tr-pill {
   display: inline-flex;
   align-items: center;
   padding: 0 0.5rem;
@@ -103,13 +79,7 @@
   color: var(--tr-muted);
 }
 
-.tidy-renown-tab .tr-pill-member {
-  color: var(--tr-text);
-  border-color: var(--tr-faction-color, var(--tr-accent));
-}
-
-.tidy-renown-tab .tr-pill-rank,
-.tidy-renown-manager .tr-pill-rank {
+.tidy-renown-tab .tr-pill-rank {
   color: var(--tr-gold);
   border-color: var(--tr-gold);
   font-weight: bold;
@@ -125,7 +95,155 @@
   border-color: var(--tr-success);
 }
 
-/* ---------- Faction cards ---------- */
+.tidy-renown-tab .tr-rich-text,
+.tidy-renown-manager .tr-rich-text {
+  font-size: 0.9em;
+}
+
+.tidy-renown-tab .tr-rich-text > :first-child,
+.tidy-renown-manager .tr-rich-text > :first-child {
+  margin-block-start: 0;
+}
+
+.tidy-renown-tab .tr-rich-text > :last-child,
+.tidy-renown-manager .tr-rich-text > :last-child {
+  margin-block-end: 0;
+}
+
+/* Rows: list of actors with an avatar, a name and trailing controls. */
+
+.tidy-renown-tab .tr-rows,
+.tidy-renown-tab .tr-chips,
+.tidy-renown-manager .tr-rows,
+.tidy-renown-manager .tr-faction-list,
+.tidy-renown-manager .tr-rank-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tidy-renown-tab .tr-row,
+.tidy-renown-manager .tr-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.375rem;
+  border-radius: var(--tr-radius);
+}
+
+.tidy-renown-tab .tr-row:hover,
+.tidy-renown-manager .tr-row:hover {
+  background: var(--tr-hover);
+}
+
+.tidy-renown-tab .tr-row-img,
+.tidy-renown-manager .tr-row-img {
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  flex: 0 0 auto;
+  object-fit: cover;
+  border: none;
+  border-radius: 50%;
+}
+
+.tidy-renown-tab .tr-row-name,
+.tidy-renown-manager .tr-row-name {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* Score stepper: [−][ 12 ][+] reads as one control. */
+
+.tidy-renown-tab .tr-stepper,
+.tidy-renown-manager .tr-stepper {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: stretch;
+  block-size: 1.75rem;
+  border: 1px solid var(--tr-border);
+  border-radius: var(--tr-radius);
+  overflow: hidden;
+  background: var(--tr-field);
+}
+
+.tidy-renown-tab .tr-stepper button,
+.tidy-renown-manager .tr-stepper button {
+  flex: 0 0 auto;
+  inline-size: 1.75rem;
+  block-size: auto;
+  min-block-size: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: var(--tr-muted);
+  font-weight: bold;
+}
+
+.tidy-renown-tab .tr-stepper button:hover,
+.tidy-renown-manager .tr-stepper button:hover {
+  background: var(--tr-hover);
+  color: var(--tr-text);
+}
+
+.tidy-renown-tab .tr-stepper input,
+.tidy-renown-manager .tr-stepper input {
+  inline-size: 3rem;
+  block-size: auto;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-inline: 1px solid var(--tr-border);
+  border-radius: 0;
+  background: none;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-weight: bold;
+  -moz-appearance: textfield;
+}
+
+.tidy-renown-tab .tr-stepper input::-webkit-inner-spin-button,
+.tidy-renown-tab .tr-stepper input::-webkit-outer-spin-button,
+.tidy-renown-manager .tr-stepper input::-webkit-inner-spin-button,
+.tidy-renown-manager .tr-stepper input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.tidy-renown-tab .tr-negative .tr-stepper input,
+.tidy-renown-manager .tr-negative .tr-stepper input {
+  color: var(--tr-danger);
+}
+
+/* ---------- Tidy tabs ---------- */
+
+.tidy-renown-tab .tr-tab {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tr-gap);
+  padding: var(--tr-gap);
+}
+
+.tidy-renown-tab .tr-tab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--tr-gap);
+}
+
+.tidy-renown-tab .tr-title {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 1.1rem;
+}
 
 .tidy-renown-tab .tr-card {
   display: flex;
@@ -144,9 +262,7 @@
   gap: 0.5rem;
 }
 
-.tidy-renown-tab .tr-faction-img,
-.tidy-renown-manager .tr-faction-img-placeholder,
-.tidy-renown-manager .tr-faction-open img {
+.tidy-renown-tab .tr-faction-img {
   inline-size: 2.25rem;
   block-size: 2.25rem;
   flex: 0 0 auto;
@@ -155,8 +271,7 @@
   border-radius: var(--tr-radius);
 }
 
-.tidy-renown-tab .tr-faction-img-placeholder,
-.tidy-renown-manager .tr-faction-img-placeholder {
+.tidy-renown-tab .tr-faction-img-placeholder {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -178,15 +293,28 @@
   white-space: nowrap;
 }
 
-.tidy-renown-tab .tr-badges {
+/* Secondary actions stay quiet until the card is hovered or focused. */
+.tidy-renown-tab .tr-card-actions {
+  display: inline-flex;
+  flex: 0 0 auto;
+  opacity: 0.45;
+  transition: opacity var(--t5e-transition-default, 150ms ease);
+}
+
+.tidy-renown-tab .tr-card:hover .tr-card-actions,
+.tidy-renown-tab .tr-card-actions:focus-within {
+  opacity: 1;
+}
+
+.tidy-renown-tab .tr-card-progress {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.25rem;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .tidy-renown-tab .tr-meter {
   position: relative;
+  flex: 1 1 auto;
   block-size: 1.25rem;
   background: var(--tr-track);
   border: 1px solid var(--tr-border);
@@ -217,79 +345,52 @@
   text-shadow: 0 0 3px var(--tr-card);
 }
 
-.tidy-renown-tab .tr-card-meta {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.25rem 0.75rem;
-}
-
-.tidy-renown-tab .tr-controls,
-.tidy-renown-tab .tr-row-controls,
-.tidy-renown-manager .tr-row-controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.tidy-renown-tab .tr-delta,
-.tidy-renown-manager .tr-delta {
+.tidy-renown-tab .tr-delta {
   min-inline-size: 2rem;
   padding-inline: 0.375rem;
   font-variant-numeric: tabular-nums;
 }
 
-.tidy-renown-tab .tr-delta-sm {
-  min-inline-size: 1.75rem;
-  font-size: 0.8rem;
-}
-
-.tidy-renown-tab .tr-delta-neg,
-.tidy-renown-manager .tr-delta-neg {
-  color: var(--tr-danger);
-}
-
-.tidy-renown-tab .tr-score-input,
-.tidy-renown-manager .tr-score-input {
-  inline-size: 3.5rem;
-  text-align: center;
-  font-variant-numeric: tabular-nums;
-}
-
-.tidy-renown-tab .tr-benefits summary {
-  cursor: pointer;
-  color: var(--tr-gold);
-  font-size: 0.85rem;
-}
-
-.tidy-renown-tab .tr-benefits ul {
-  margin: 0.25rem 0 0;
-  padding-inline-start: 1.25rem;
-}
-
-.tidy-renown-tab .tr-faction-description summary {
+.tidy-renown-tab .tr-card-details > summary {
   cursor: pointer;
   color: var(--tr-muted);
   font-size: 0.85rem;
 }
 
-.tidy-renown-tab .tr-rich-text {
-  margin-block-start: 0.25rem;
-  font-size: 0.9em;
+.tidy-renown-tab .tr-card-details[open] {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
 }
 
-.tidy-renown-tab .tr-rich-text > :first-child {
-  margin-block-start: 0;
+.tidy-renown-tab .tr-card-details[open] > summary {
+  margin-block-end: 0.125rem;
 }
 
-.tidy-renown-tab .tr-rich-text > :last-child {
-  margin-block-end: 0;
+.tidy-renown-tab .tr-subheading {
+  margin: 0;
+  color: var(--tr-gold);
+  font-size: 0.85rem;
+}
+
+.tidy-renown-tab .tr-benefits {
+  margin: 0;
+}
+
+.tidy-renown-tab .tr-benefits dt {
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.tidy-renown-tab .tr-benefits dd {
+  margin: 0 0 0.375rem;
+  padding-inline-start: 0.75rem;
+  border-inline-start: 2px solid var(--tr-track);
 }
 
 .tidy-renown-tab .tr-notes {
   inline-size: 100%;
-  min-block-size: 1.75rem;
+  min-block-size: 2.5rem;
   resize: vertical;
   font-size: 0.85rem;
   background: var(--tr-field);
@@ -303,46 +404,6 @@
   color: var(--tr-muted);
 }
 
-/* ---------- Rows (NPC relations, members) ---------- */
-
-.tidy-renown-tab .tr-rows,
-.tidy-renown-manager .tr-rows,
-.tidy-renown-tab .tr-chips,
-.tidy-renown-manager .tr-faction-list,
-.tidy-renown-manager .tr-rank-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.tidy-renown-tab .tr-row,
-.tidy-renown-manager .tr-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.25rem 0;
-  border-bottom: 1px solid var(--tr-track);
-}
-
-.tidy-renown-tab .tr-row-img,
-.tidy-renown-manager .tr-row-img {
-  inline-size: 1.75rem;
-  block-size: 1.75rem;
-  object-fit: cover;
-  border: none;
-  border-radius: 50%;
-}
-
-.tidy-renown-tab .tr-row-name,
-.tidy-renown-manager .tr-row-name {
-  flex: 1 1 auto;
-  min-inline-size: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
 .tidy-renown-tab .tr-score {
   min-inline-size: 2rem;
   text-align: end;
@@ -350,26 +411,22 @@
   font-variant-numeric: tabular-nums;
 }
 
-.tidy-renown-tab .tr-score-neg,
-.tidy-renown-tab .tr-negative .tr-score {
+.tidy-renown-tab .tr-score-neg {
   color: var(--tr-danger);
 }
 
-.tidy-renown-tab .tr-add-row,
-.tidy-renown-manager .tr-add-row {
+.tidy-renown-tab .tr-add-row {
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  margin-top: 0.25rem;
 }
 
-.tidy-renown-tab .tr-add-row select,
-.tidy-renown-manager .tr-add-row select {
+.tidy-renown-tab .tr-add-row select {
   flex: 1 1 auto;
   min-inline-size: 0;
 }
 
-/* ---------- NPC tab ---------- */
+/* NPC tab */
 
 .tidy-renown-tab .tr-standing {
   display: flex;
@@ -426,68 +483,152 @@
   object-fit: cover;
 }
 
-/* ---------- Faction manager (Foundry window) ---------- */
+/* ---------- Faction manager and its dialogs (Foundry windows) ---------- */
 
 .tidy-renown-manager .window-content {
   padding: 0;
+  overflow: hidden;
 }
+
+.tidy-renown-manager button {
+  flex: 0 0 auto;
+  inline-size: auto;
+  white-space: nowrap;
+}
+
+.tidy-renown-manager .tr-primary {
+  border-color: var(--tr-accent);
+  font-weight: 600;
+}
+
+.tidy-renown-manager .tr-icon-button {
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  min-block-size: 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.tidy-renown-manager .tr-icon-button:hover {
+  background: var(--tr-hover);
+}
+
+.tidy-renown-manager .tr-icon-button.tr-active {
+  color: var(--tr-success);
+}
+
+.tidy-renown-manager .tr-stack {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  line-height: 1.25;
+}
+
+.tidy-renown-manager .tr-stack > * {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tidy-renown-manager .tr-avatar {
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  flex: 0 0 auto;
+  object-fit: cover;
+  border: 1px solid var(--tr-border);
+  border-radius: var(--tr-radius);
+}
+
+.tidy-renown-manager .tr-avatar-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tr-faction-color, var(--tr-accent));
+}
+
+.tidy-renown-manager .tr-count {
+  padding: 0 0.375rem;
+  border-radius: 999px;
+  background: var(--tr-track);
+  font-size: 0.75rem;
+  line-height: 1.2rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--tr-muted);
+}
+
+.tidy-renown-manager .tr-toolbar,
+.tidy-renown-manager .tr-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.tidy-renown-manager .tr-toolbar > p {
+  flex: 1 1 auto;
+  margin: 0;
+}
+
+.tidy-renown-manager .tr-actions {
+  justify-content: flex-end;
+  margin-block-start: auto;
+}
+
+.tidy-renown-manager .tr-search {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.tidy-renown-manager .form-group {
+  margin: 0;
+}
+
+.tidy-renown-manager .tr-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 1rem;
+}
+
+.tidy-renown-manager .tr-form-grid .form-group {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.25rem;
+}
+
+.tidy-renown-manager .tr-form-grid .form-group > label {
+  flex: none;
+  font-weight: 600;
+}
+
+.tidy-renown-manager .tr-form-grid .hint {
+  margin: 0;
+}
+
+.tidy-renown-manager .tr-rich-field > label {
+  font-weight: 600;
+}
+
+.tidy-renown-manager .tr-rich-field prose-mirror {
+  min-block-size: 8rem;
+  border: 1px solid var(--tr-border);
+  border-radius: var(--tr-radius);
+  background: var(--tr-field);
+}
+
+/* List view */
 
 .tidy-renown-manager .tr-manager-body {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   padding: 0.75rem;
-  overflow-y: auto;
   block-size: 100%;
-}
-
-.tidy-renown-manager .tr-manager-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 0.375rem;
-}
-
-.tidy-renown-manager .tr-manager-actions button {
-  flex: 0 0 auto;
-  inline-size: auto;
-}
-
-.tidy-renown-manager fieldset {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  min-inline-size: 0;
-  margin: 0;
-  padding: 0.75rem;
-  border: 1px solid var(--tr-border);
-  border-radius: var(--tr-radius);
-}
-
-.tidy-renown-manager fieldset > legend {
-  padding-inline: 0.25rem;
-  font-weight: 600;
-}
-
-.tidy-renown-manager .tr-faction-fields {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.5rem 0.75rem;
-}
-
-.tidy-renown-manager .tr-faction-fields .form-group {
-  margin: 0;
-}
-
-.tidy-renown-manager .tr-rich-field {
-  grid-column: 1 / -1;
-}
-
-.tidy-renown-manager .tr-rich-field prose-mirror {
-  min-block-size: 6rem;
-  border: 1px solid var(--tr-border);
-  border-radius: var(--tr-radius);
-  background: var(--tr-field);
+  overflow-y: auto;
 }
 
 .tidy-renown-manager .tr-faction-list {
@@ -508,126 +649,264 @@
   gap: 0.625rem;
   inline-size: 100%;
   block-size: auto;
-  padding: 0.375rem 0.625rem;
+  padding: 0.5rem 0.75rem;
   background: none;
   border: none;
+  box-shadow: none;
   text-align: start;
 }
 
-.tidy-renown-manager .tr-faction-item-text {
+.tidy-renown-manager .tr-faction-open:hover {
+  background: var(--tr-hover);
+}
+
+/* Detail view: header, tabs, scrolling tab body */
+
+.tidy-renown-manager .tr-detail {
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;
+  block-size: 100%;
 }
+
+.tidy-renown-manager .tr-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.75rem;
+  border-block-end: 1px solid var(--tr-border);
+  border-block-start: 3px solid var(--tr-faction-color, transparent);
+}
+
+.tidy-renown-manager .tr-detail-name {
+  font-size: 1.1rem;
+}
+
+.tidy-renown-manager .tr-tabs {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0 0.75rem;
+  border-block-end: 1px solid var(--tr-border);
+}
+
+.tidy-renown-manager .tr-tabs > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  margin-block-end: -1px;
+  border-block-end: 2px solid transparent;
+  color: var(--tr-muted);
+  text-shadow: none;
+}
+
+.tidy-renown-manager .tr-tabs > a:hover {
+  color: var(--tr-text);
+}
+
+.tidy-renown-manager .tr-tabs > a.active {
+  color: var(--tr-text);
+  border-block-end-color: var(--tr-faction-color, var(--tr-accent));
+  font-weight: 600;
+}
+
+.tidy-renown-manager .tr-tab-body {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  overflow-y: auto;
+}
+
+.tidy-renown-manager .tr-tab-body:not(.active) {
+  display: none;
+}
+
+.tidy-renown-manager .tr-tab-body.active {
+  display: flex;
+}
+
+.tidy-renown-manager .tr-advanced > summary {
+  cursor: pointer;
+  color: var(--tr-muted);
+  font-size: 0.9em;
+}
+
+.tidy-renown-manager .tr-advanced[open] > summary {
+  margin-block-end: 0.5rem;
+}
+
+/* Ranks */
 
 .tidy-renown-manager .tr-rank-list {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  gap: 0.375rem;
 }
 
 .tidy-renown-manager .tr-rank {
-  display: grid;
-  grid-template-columns: 4rem 1fr auto;
-  gap: 0.25rem 0.375rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.5rem 0.625rem;
+  background: var(--tr-card);
+  border: 1px solid var(--tr-border);
+  border-radius: var(--tr-radius);
+}
+
+.tidy-renown-manager .tr-rank-score {
+  flex: 0 0 auto;
+  min-inline-size: 2.5rem;
+  padding: 0.125rem 0.375rem;
+  border: 1px solid var(--tr-gold);
+  border-radius: var(--tr-radius);
+  color: var(--tr-gold);
+  font-weight: bold;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.tidy-renown-manager .tr-rank-body {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.tidy-renown-manager .tr-clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  color: var(--tr-muted);
+}
+
+.tidy-renown-manager .tr-row-actions {
+  display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
 }
 
-.tidy-renown-manager .tr-rank-desc {
-  min-block-size: 5rem;
-  border: 1px solid var(--tr-border);
-  border-radius: var(--tr-radius);
-  background: var(--tr-field);
-}
+/* Members, grouped by folder */
 
-.tidy-renown-manager .tr-rank-description {
-  grid-column: 1 / -1;
-}
-
-.tidy-renown-manager .tr-rank-description summary {
-  cursor: pointer;
-  color: var(--tr-muted);
-  font-size: 0.85em;
-}
-
-.tidy-renown-manager .tr-rank-description prose-mirror {
-  margin-block-start: 0.25rem;
-}
-
-.tidy-renown-manager .tr-folder + .tr-folder {
-  margin-block-start: 0.5rem;
+.tidy-renown-manager .tr-member-list,
+.tidy-renown-manager .tr-picker-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .tidy-renown-manager .tr-folder-title {
   display: flex;
   align-items: center;
-  gap: 0.375rem;
-  margin: 0.375rem 0 0.125rem;
-  color: var(--tr-muted);
-  font-size: 0.85rem;
+  gap: 0.5rem;
+  padding: 0.25rem 0.375rem;
+  border-radius: var(--tr-radius);
+  cursor: pointer;
+  list-style: none;
   font-weight: 600;
+  color: var(--tr-muted);
 }
 
-.tidy-renown-manager .tr-rank-editor-body {
+.tidy-renown-manager .tr-folder-title::-webkit-details-marker {
+  display: none;
+}
+
+.tidy-renown-manager .tr-folder-title:hover {
+  background: var(--tr-hover);
+}
+
+.tidy-renown-manager .tr-folder-title > span:first-of-type {
+  flex: 1 1 auto;
+}
+
+.tidy-renown-manager .tr-folder:not([open]) .tr-folder-opened,
+.tidy-renown-manager .tr-folder[open] .tr-folder-closed {
+  display: none;
+}
+
+.tidy-renown-manager .tr-folder > .tr-rows {
+  margin-inline-start: 0.75rem;
+  padding-inline-start: 0.5rem;
+  border-inline-start: 1px solid var(--tr-track);
+}
+
+.tidy-renown-manager .tr-row-name.tr-stack {
+  cursor: pointer;
+}
+
+.tidy-renown-manager .tr-dropzone.tr-drag-over {
+  outline: 2px dashed var(--tr-accent);
+  outline-offset: -4px;
+}
+
+.tidy-renown-manager .tr-drop-hint {
+  margin: auto 0 0;
+  text-align: center;
+}
+
+/* Dialogs (rank editor, actor picker) */
+
+.tidy-renown-manager .tr-dialog {
+  display: flex;
+  flex-direction: column;
+  block-size: 100%;
+}
+
+.tidy-renown-manager .tr-dialog-body {
+  flex: 1 1 auto;
+  min-block-size: 0;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   padding: 0.75rem;
 }
 
-.tidy-renown-manager .tr-rank-editor-body .form-group {
-  margin: 0;
+.tidy-renown-manager .tr-rank-head {
+  grid-template-columns: 9rem minmax(0, 1fr);
 }
 
-.tidy-renown-manager .tr-rank-editor-body .form-footer {
+.tidy-renown-manager .tr-dialog-body prose-mirror {
+  min-block-size: 14rem;
+}
+
+.tidy-renown-manager .tr-dialog-footer {
   display: flex;
   justify-content: flex-end;
   gap: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  border-block-start: 1px solid var(--tr-border);
 }
 
-.tidy-renown-manager .tr-icon-button {
+.tidy-renown-manager .tr-picker-list {
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+}
+
+.tidy-renown-manager .tr-picker .hint {
+  margin: 0;
+}
+
+.tidy-renown-manager .tr-pick {
+  cursor: pointer;
+}
+
+.tidy-renown-manager .tr-pick input,
+.tidy-renown-manager .tr-folder-title input {
   flex: 0 0 auto;
-  inline-size: 1.75rem;
-  block-size: 1.75rem;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.tidy-renown-manager .tr-icon-button.tr-active {
-  color: var(--tr-success);
-}
-
-.tidy-renown-manager .tr-row-controls button.tr-delta {
-  flex: 0 0 auto;
-  inline-size: auto;
-  block-size: 1.75rem;
-}
-
-.tidy-renown-manager .tr-dropzone.tr-drag-over {
-  outline: 2px dashed var(--tr-accent);
-  outline-offset: -2px;
-}
-
-.tidy-renown-manager .tr-negative .tr-score-input {
-  color: var(--tr-danger);
+  margin: 0;
 }
 
 @media (max-width: 520px) {
-  .tidy-renown-manager .tr-faction-fields {
+  .tidy-renown-manager .tr-form-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 
   .tidy-renown-manager .tr-row {
     flex-wrap: wrap;
-  }
-
-  .tidy-renown-manager .tr-row-controls {
-    flex-basis: 100%;
-    justify-content: flex-end;
-    margin-inline-start: auto;
   }
 }
 

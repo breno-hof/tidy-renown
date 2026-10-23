@@ -7,7 +7,6 @@
       "Empty": "No renown with any group yet.",
       "EmptyGM": "Add a group below or use the faction manager.",
       "Member": "Member",
-      "NotMember": "Not a member",
       "Cap": "Cap",
       "Score": "Renown Score",
       "RemoveMember": "Remove membership",
@@ -21,15 +20,23 @@
       "AddNpc": "Add NPC relation",
       "IncreaseHint": "Ask the GM for +1 renown",
       "NextRank": "Next: {rank} at {score}",
-      "MissingNpc": "Deleted NPC"
+      "MissingNpc": "Deleted NPC",
+      "Details": "Details",
+      "BenefitsCount": "{n} benefit(s)"
     },
     "Rank": {
       "Unnamed": "Threshold {score}",
       "MinScore": "Minimum Renown Score",
       "NamePlaceholder": "Rank or title (optional)",
-      "DescriptionPlaceholder": "Benefits and other prerequisites",
+      "DescriptionPlaceholder": "Benefits and any other prerequisites. Only text: nothing is automated.",
       "InvalidScore": "Enter a valid minimum score for this rank.",
-      "Remove": "Remove rank"
+      "Remove": "Remove rank",
+      "NewTitle": "New rank",
+      "EditTitle": "Edit rank",
+      "Name": "Name",
+      "Benefits": "Benefits",
+      "Edit": "Edit rank",
+      "RemoveConfirm": "Remove the rank <strong>{name}</strong>?"
     },
     "Faction": {
       "Kind": {
@@ -64,19 +71,28 @@
       "DeleteTitle": "Delete group",
       "DeleteConfirm": "Delete <strong>{name}</strong>? Its renown entries will be removed from every actor.",
       "Details": "Details",
-      "Ranks": "Ranks and benefits",
+      "Ranks": "Ranks",
       "RanksHint": "The DMG 2024 defines no default ranks: set your own thresholds. A rank is reached at its minimum score; other prerequisites are just text.",
       "UseDmgThresholds": "Use DMG thresholds (3, 10, 50)",
       "AddRank": "Add rank",
-      "AddRankTitle": "New rank",
-      "RankEditorHint": "Set the threshold and benefits for this rank.",
       "Cancel": "Cancel",
-      "Members": "Members and relations",
-      "DropHint": "Drag actors here from the sidebar, or pick one below. Characters and the party get a score; NPCs become group members.",
-      "NpcMembers": "NPC members",
+      "Members": "Members",
+      "DropHint": "Tip: you can also drag actors from the sidebar onto this tab. Characters and the party get a score; NPCs become members of the group.",
       "NoMembers": "Nobody is linked to this group yet.",
-      "AddActor": "Add",
-      "UnfiledActors": "Unfiled"
+      "UnfiledActors": "Unfiled",
+      "Save": "Save",
+      "Advanced": "Progress bar and cap",
+      "NoRanks": "No ranks yet. Add one or start from the DMG thresholds.",
+      "Search": "Search by name…",
+      "AddActors": "Add actors",
+      "NpcMember": "NPC · member"
+    },
+    "Picker": {
+      "Title": "Add actors",
+      "Add": "Add ({n})",
+      "Empty": "Every eligible actor is already linked to this group.",
+      "SelectFolder": "Select the whole folder",
+      "Hint": "Characters and the party get a score; NPCs become members."
     },
     "Npc": {
       "PartyScore": "Party score",

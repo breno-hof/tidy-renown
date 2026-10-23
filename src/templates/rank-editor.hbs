@@ -1,23 +1,29 @@
-<div class="tr-rank-editor-body">
-  <p class="hint">{{localize "TIDY_RENOWN.Manager.RankEditorHint"}}</p>
-  <div class="form-group">
-    <label>{{localize "TIDY_RENOWN.Rank.MinScore"}}</label>
-    <div class="form-fields">
-      <input type="number" name="rank.minScore" value="{{minScore}}" step="1" required />
+<div class="tr-dialog">
+<div class="tr-dialog-body">
+  <div class="tr-form-grid tr-rank-head">
+    <div class="form-group">
+      <label>{{localize "TIDY_RENOWN.Rank.MinScore"}}</label>
+      <div class="form-fields">
+        <input type="number" name="rank.minScore" value="{{rank.minScore}}" step="1" required />
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <label>{{localize "TIDY_RENOWN.Rank.NamePlaceholder"}}</label>
-    <div class="form-fields">
-      <input type="text" name="rank.name" placeholder="{{localize "TIDY_RENOWN.Rank.NamePlaceholder"}}" />
+    <div class="form-group">
+      <label>{{localize "TIDY_RENOWN.Rank.Name"}}</label>
+      <div class="form-fields">
+        <input type="text" name="rank.name" value="{{rank.name}}" placeholder="{{localize "TIDY_RENOWN.Rank.NamePlaceholder"}}" autofocus />
+      </div>
     </div>
   </div>
   <div class="form-group stacked tr-rich-field">
-    <label>{{localize "TIDY_RENOWN.Rank.DescriptionPlaceholder"}}</label>
-    <prose-mirror name="rank.description" value="" compact="true" toggled="true"></prose-mirror>
+    <label>{{localize "TIDY_RENOWN.Rank.Benefits"}}</label>
+    <prose-mirror name="rank.description" value="{{rank.description}}"></prose-mirror>
+    <p class="hint">{{localize "TIDY_RENOWN.Rank.DescriptionPlaceholder"}}</p>
   </div>
-  <footer class="form-footer">
-    <button type="button" data-action="cancel">{{localize "TIDY_RENOWN.Manager.Cancel"}}</button>
-    <button type="submit"><i class="fa-solid fa-plus" inert></i> {{localize "TIDY_RENOWN.Manager.AddRank"}}</button>
-  </footer>
+</div>
+<footer class="form-footer tr-dialog-footer">
+  <button type="button" data-action="cancel">{{localize "TIDY_RENOWN.Manager.Cancel"}}</button>
+  <button type="submit" class="tr-primary">
+    {{#if isEdit}}<i class="fa-solid fa-floppy-disk" inert></i> {{localize "TIDY_RENOWN.Manager.Save"}}{{else}}<i class="fa-solid fa-plus" inert></i> {{localize "TIDY_RENOWN.Manager.AddRank"}}{{/if}}
+  </button>
+</footer>
 </div>

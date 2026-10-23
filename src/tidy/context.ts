@@ -1,6 +1,7 @@
 /** View models for the Renown tabs (RF-04). Strings are resolved here, templates stay dumb. */
 import { SETTINGS } from "../constants.js";
 import { getFactionMap, getFactions } from "../data/factions.js";
+import { groupByFolder } from "../data/folders.js";
 import { getNpcIndividualRelations } from "../data/membership-index.js";
 import { getNpcFactionIds, getRelations, isNpc } from "../data/renown.js";
 import {
@@ -29,12 +30,17 @@ function kindLabel(faction: FactionDef): string {
   return t(`TIDY_RENOWN.Faction.Kind.${faction.kind}`);
 }
 
-const QUICK_DELTAS = [1, 2, 3, 4, -1, -2].map((d) => ({
-  delta: d,
-  label: d > 0 ? `+${d}` : `−${Math.abs(d)}`,
-  negative: d < 0,
-  small: Math.abs(d) <= 2,
-}));
+/** `<optgroup>`-ready actor choices, grouped like the Actors sidebar. */
+function actorOptions(actors: any[]) {
+  return groupByFolder(
+    actors.map((a) => ({ id: a.id, name: a.name, actor: a })),
+    (row) => row.actor,
+    t("TIDY_RENOWN.Manager.UnfiledActors"),
+  ).map((folder) => ({
+    name: folder.name,
+    actors: folder.actors.map(({ id, name }) => ({ id, name })),
+  }));
+}
 
 function permissions(actor: any) {
   const isGM = !!game.user.isGM;
@@ -73,6 +79,12 @@ export async function buildScoreHolderContext(actor: any) {
                 }),
               })),
           );
+          const descriptionHtml = faction.description
+            ? await foundry.applications.ux.TextEditor.enrichHTML(faction.description, {
+                secrets: game.user.isGM,
+              })
+            : "";
+          const notes = entry.notes ?? "";
           return {
             key,
             id: faction.id,
@@ -80,14 +92,11 @@ export async function buildScoreHolderContext(actor: any) {
             img: faction.img,
             color: faction.color,
             kindLabel: kindLabel(faction),
-            descriptionHtml: faction.description
-              ? await foundry.applications.ux.TextEditor.enrichHTML(faction.description, {
-                  secrets: game.user.isGM,
-                })
-              : "",
+            descriptionHtml,
             score: entry.score,
             member: !!entry.member,
-            notes: entry.notes ?? "",
+            notes,
+            hasDetails: !!descriptionHtml || benefits.length > 0 || !!notes || perms.isGM,
             cap: faction.cap,
             progressMax: faction.progressMax,
             progressPct: progress.pct,
@@ -127,7 +136,6 @@ export async function buildScoreHolderContext(actor: any) {
     ...perms,
     actorId: actor.id,
     isParty: actor.type === "group",
-    quickDeltas: QUICK_DELTAS,
     factions: factionCards,
     npcRelations,
     hasNpcRelations: npcRelations.length > 0,
@@ -137,11 +145,8 @@ export async function buildScoreHolderContext(actor: any) {
           .filter((f) => !linked.has(f.id))
           .map((f) => ({ id: f.id, name: f.name }))
       : [],
-    availableNpcs: perms.isGM
-      ? game.actors
-          .filter((a: any) => isNpc(a) && !linkedNpcs.has(a.id))
-          .map((a: any) => ({ id: a.id, name: a.name }))
-          .sort((a: any, b: any) => a.name.localeCompare(b.name))
+    availableNpcFolders: perms.isGM
+      ? actorOptions(game.actors.filter((a: any) => isNpc(a) && !linkedNpcs.has(a.id)))
       : [],
   };
 }
@@ -181,7 +186,6 @@ export function buildNpcContext(actor: any) {
   return {
     isGM,
     npcId,
-    quickDeltas: QUICK_DELTAS.filter((d) => d.small),
     memberOf,
     relations,
     hasRelations: relations.length > 0,
@@ -198,16 +202,15 @@ export function buildNpcContext(actor: any) {
           .filter((f) => !memberIds.has(f.id))
           .map((f) => ({ id: f.id, name: f.name }))
       : [],
-    availableCharacters: isGM
-      ? game.actors
-          .filter(
+    availableCharacterFolders: isGM
+      ? actorOptions(
+          game.actors.filter(
             (a: any) =>
               (a.type === "character" || a.type === "group") &&
               !linkedChars.has(a.id) &&
               !(npcKey(npcId) in getRelations(a)),
-          )
-          .map((a: any) => ({ id: a.id, name: a.name }))
-          .sort((a: any, b: any) => a.name.localeCompare(b.name))
+          ),
+        )
       : [],
   };
 }

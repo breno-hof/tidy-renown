@@ -10,7 +10,8 @@ export function rerenderRenownViews(): void {
   if (!instances) return;
   for (const app of instances.values()) {
     const isActorSheet = app.document?.documentName === "Actor";
-    const isManager = app.options?.classes?.includes(`${MODULE_ID}-manager`);
+    // Only the manager itself: its dialogs (rank editor, actor picker) hold unsaved input.
+    const isManager = app.id === `${MODULE_ID}-manager`;
     if ((isActorSheet || isManager) && app.rendered) app.render();
   }
 }
