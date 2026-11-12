@@ -182,3 +182,58 @@ export function canPlayerIncrease(opts: {
   if (opts.cap != null && newScore > opts.cap) return { ok: false, reason: "cap" };
   return { ok: true, newScore };
 }
+
+/** Envelope written by "Export groups" so other worlds can recognize the file. */
+export const FACTION_EXPORT_FORMAT = "tidy-renown.factions";
+export const FACTION_EXPORT_VERSION = 1;
+
+export interface FactionExport {
+  format: typeof FACTION_EXPORT_FORMAT;
+  version: number;
+  exportedAt: string;
+  factions: FactionDef[];
+}
+
+export function buildFactionExport(
+  factions: readonly FactionDef[],
+  now = new Date(),
+): FactionExport {
+  return {
+    format: FACTION_EXPORT_FORMAT,
+    version: FACTION_EXPORT_VERSION,
+    exportedAt: now.toISOString(),
+    factions: factions.map((f) => normalizeFaction(f)),
+  };
+}
+
+/**
+ * Reads an exported file (or a bare array / id map of factions) back into
+ * normalized definitions. Entries without an id get `makeId()`, ranks too.
+ * Throws when nothing usable is found.
+ */
+export function parseFactionExport(data: unknown, makeId: () => string): FactionDef[] {
+  const source =
+    data && typeof data === "object" && !Array.isArray(data) && "factions" in data
+      ? (data as { factions: unknown }).factions
+      : data;
+  const list = Array.isArray(source)
+    ? source
+    : source && typeof source === "object"
+      ? Object.values(source)
+      : [];
+  const factions = list
+    .filter((f): f is Record<string, unknown> => !!f && typeof f === "object" && "name" in f)
+    .map((f) => {
+      const rawRanks = Array.isArray(f.ranks) ? f.ranks : Object.values(f.ranks ?? {});
+      const ranks = (rawRanks as Partial<RankDef>[])
+        .filter((r) => r && typeof r === "object")
+        .map((r) => ({ ...r, id: r.id ? String(r.id) : makeId() }));
+      return normalizeFaction({
+        ...(f as Partial<FactionDef>),
+        id: f.id ? String(f.id) : makeId(),
+        ranks: ranks as RankDef[],
+      });
+    });
+  if (!factions.length) throw new Error("No factions found in the file.");
+  return factions;
+}

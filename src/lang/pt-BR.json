@@ -20,8 +20,8 @@
       "IncreaseHint": "Pedir +1 de renome ao mestre",
       "NextRank": "Próximo: {rank} em {score}",
       "MissingNpc": "NPC excluído",
-      "Details": "Detalhes",
-      "BenefitsCount": "{n} benefício(s)"
+      "About": "Sobre",
+      "UnlockHint": "Destrave a ficha para editar o renome."
     },
     "Rank": {
       "Unnamed": "Limiar {score}",
@@ -107,7 +107,8 @@
       "JoinFaction": "Adicionar ao grupo",
       "Relations": "Relações individuais",
       "NoRelations": "Sem relações individuais.",
-      "AddRelation": "Adicionar relação"
+      "AddRelation": "Adicionar relação",
+      "Locked": "Disposição travada"
     },
     "Disposition": {
       "hostile": "Hostil",
@@ -172,6 +173,20 @@
       "MakeMembers": "Tornar os selecionados membros",
       "RemoveMembers": "Remover os selecionados como membros",
       "Clear": "Limpar seleção"
+    },
+    "Import": {
+      "Button": "Importar grupos",
+      "Title": "Importar grupos",
+      "Conflict": "{n} grupo(s) deste arquivo já existem neste mundo. Sobrescrevê-los (os atores continuam vinculados) ou importá-los como cópias?",
+      "Overwrite": "Sobrescrever",
+      "Copy": "Importar como cópias",
+      "Invalid": "Tidy Renown: este arquivo não contém nenhum grupo.",
+      "Done": "Tidy Renown: {n} grupo(s) importado(s)."
+    },
+    "Export": {
+      "All": "Exportar todos os grupos",
+      "One": "Exportar este grupo",
+      "Empty": "Não há grupos para exportar."
     }
   }
 }

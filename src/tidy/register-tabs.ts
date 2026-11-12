@@ -11,6 +11,14 @@ function actorFrom(context: any): any {
   return context?.actor ?? context?.document ?? null;
 }
 
+/**
+ * Tidy's edit-mode lock. Toggling it re-renders the sheet, and with it this tab.
+ * Sheets that do not report it count as unlocked (previous behaviour).
+ */
+function isUnlocked(context: any): boolean {
+  return context?.unlocked ?? true;
+}
+
 export function registerTidyTabs(api: any): void {
   const scoreHolderTab = (tabId: string) =>
     new api.models.HandlebarsTab({
@@ -21,7 +29,10 @@ export function registerTidyTabs(api: any): void {
       tabContentsClasses: [`${MODULE_ID}-tab`],
       getData: async (context: any) => {
         const actor = actorFrom(context);
-        return { ...context, tidyRenown: actor ? await buildScoreHolderContext(actor) : null };
+        return {
+          ...context,
+          tidyRenown: actor ? await buildScoreHolderContext(actor, isUnlocked(context)) : null,
+        };
       },
       onRender: (params: any) => bindRenownControls(params.tabContentsElement, params.app),
     });
@@ -39,7 +50,10 @@ export function registerTidyTabs(api: any): void {
       enabled: () => game.user.isGM || !!getSetting<boolean>(SETTINGS.showNpcRelationsToPlayers),
       getData: async (context: any) => {
         const actor = actorFrom(context);
-        return { ...context, tidyRenown: actor ? buildNpcContext(actor) : null };
+        return {
+          ...context,
+          tidyRenown: actor ? buildNpcContext(actor, isUnlocked(context)) : null,
+        };
       },
       onRender: (params: any) => bindRenownControls(params.tabContentsElement, params.app),
     }),

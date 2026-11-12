@@ -3,6 +3,8 @@
   <aside class="tr-sidebar">
     <header class="tr-toolbar">
       <button type="button" class="tr-primary tr-grow" data-action="newFaction" data-tooltip="{{localize "TIDY_RENOWN.Manager.NewFaction"}}"><i class="fa-solid fa-plus" inert></i> <span class="tr-sidebar-label">{{localize "TIDY_RENOWN.Manager.NewFaction"}}</span></button>
+      <button type="button" class="tr-icon-button tr-sidebar-label" data-action="importFactions" data-tooltip="{{localize "TIDY_RENOWN.Import.Button"}}" aria-label="{{localize "TIDY_RENOWN.Import.Button"}}"><i class="fa-solid fa-file-import" inert></i></button>
+      <button type="button" class="tr-icon-button tr-sidebar-label" data-action="exportAll" data-tooltip="{{localize "TIDY_RENOWN.Export.All"}}" aria-label="{{localize "TIDY_RENOWN.Export.All"}}"{{#unless factions.length}} disabled{{/unless}}><i class="fa-solid fa-file-export" inert></i></button>
       <button type="button" class="tr-icon-button tr-sidebar-label" data-action="recalc" data-tooltip="{{localize "TIDY_RENOWN.Manager.Recalc"}}" aria-label="{{localize "TIDY_RENOWN.Manager.Recalc"}}"><i class="fa-solid fa-rotate" inert></i></button>
     </header>
     <ul class="tr-faction-list">
@@ -29,6 +31,7 @@
         <strong class="tr-detail-name">{{displayName}}</strong>
         <span class="tr-muted">{{kindLabel}}</span>
       </span>
+      <button type="button" class="tr-icon-button" data-action="exportFaction" data-tooltip="{{localize "TIDY_RENOWN.Export.One"}}" aria-label="{{localize "TIDY_RENOWN.Export.One"}}"><i class="fa-solid fa-file-export" inert></i></button>
       <button type="button" class="tr-icon-button tr-danger" data-action="deleteFaction" data-tooltip="{{localize "TIDY_RENOWN.Manager.Delete"}}" aria-label="{{localize "TIDY_RENOWN.Manager.Delete"}}"><i class="fa-solid fa-trash" inert></i></button>
     </header>
 
@@ -206,6 +209,7 @@
       <i class="fa-solid fa-people-group" inert></i>
       <p>{{localize "TIDY_RENOWN.Manager.Empty"}}</p>
       <p class="tr-muted">{{localize "TIDY_RENOWN.Manager.Intro"}}</p>
+      <button type="button" data-action="importFactions"><i class="fa-solid fa-file-import" inert></i> {{localize "TIDY_RENOWN.Import.Button"}}</button>
     </div>
   {{/if}}
   </div>

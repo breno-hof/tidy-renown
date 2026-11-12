@@ -19,8 +19,8 @@ import { requestIncrease } from "../services/socket.js";
 
 const BOUND = "trBound";
 
-/** Open "details" sections per actor, so re-renders after a score change keep them open. */
-const openDetails = new Set<string>();
+/** Open card panel per `${actorId}:${cardKey}`, so re-renders after a score change keep it open. */
+const openPanels = new Map<string, string>();
 
 function sheetActor(app: any): any {
   return app?.actor ?? app?.document ?? null;
@@ -46,27 +46,36 @@ function selectedValue(root: HTMLElement, name: string): string {
   return root.querySelector<HTMLSelectElement>(`select[data-tr-select="${name}"]`)?.value ?? "";
 }
 
+/** Shows `panel` on a faction card (or none), keeping the toggles' aria state in sync. */
+function showPanel(card: HTMLElement, panel: string | null): void {
+  for (const toggle of card.querySelectorAll<HTMLElement>("[data-tr-action='panel']")) {
+    toggle.setAttribute("aria-expanded", String(toggle.dataset.panel === panel));
+  }
+  for (const body of card.querySelectorAll<HTMLElement>("[data-tr-panel-body]")) {
+    body.hidden = body.dataset.trPanelBody !== panel;
+  }
+}
+
+function togglePanel(el: HTMLElement, actorId: string): void {
+  const card = el.closest<HTMLElement>("[data-tr-card]");
+  const panel = el.dataset.panel;
+  if (!card || !panel) return;
+  const id = `${actorId}:${card.dataset.trCard}`;
+  const next = openPanels.get(id) === panel ? null : panel;
+  if (next) openPanels.set(id, next);
+  else openPanels.delete(id);
+  showPanel(card, next);
+}
+
 export function bindRenownControls(root: HTMLElement | null | undefined, app: any): void {
   if (!root) return;
   const actorId = sheetActor(app)?.id ?? "";
-  for (const details of root.querySelectorAll<HTMLDetailsElement>("details[data-tr-details]")) {
-    if (openDetails.has(`${actorId}:${details.dataset.trDetails}`)) details.open = true;
+  for (const card of root.querySelectorAll<HTMLElement>("[data-tr-card]")) {
+    const panel = openPanels.get(`${actorId}:${card.dataset.trCard}`);
+    if (panel && card.querySelector(`[data-tr-panel-body="${panel}"]`)) showPanel(card, panel);
   }
   if (root.dataset[BOUND]) return;
   root.dataset[BOUND] = "1";
-
-  // `toggle` does not bubble, so listen in the capture phase.
-  root.addEventListener(
-    "toggle",
-    (event) => {
-      const details = event.target as HTMLElement;
-      if (!(details instanceof HTMLDetailsElement) || !details.dataset.trDetails) return;
-      const id = `${sheetActor(app)?.id ?? ""}:${details.dataset.trDetails}`;
-      if (details.open) openDetails.add(id);
-      else openDetails.delete(id);
-    },
-    true,
-  );
 
   root.addEventListener("click", (event) => {
     const button = (event.target as HTMLElement).closest<HTMLElement>("[data-tr-action]");
@@ -95,7 +104,11 @@ async function onAction(el: HTMLElement, root: HTMLElement, sheet: any): Promise
   const key = el.dataset.key ?? "";
   const factionId = el.dataset.factionId ?? "";
 
-  // Player-facing action first; everything else is GM-only.
+  // Player-facing actions first; everything else is GM-only.
+  if (action === "panel") {
+    togglePanel(el, sheet?.id ?? "");
+    return;
+  }
   if (action === "increase") {
     if (game.user.isGM) await guarded(() => adjustScore(actor, key, 1));
     else requestIncrease(actor, key);

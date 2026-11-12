@@ -1,5 +1,5 @@
 import { DEFAULT_PROGRESS_MAX, DMG_THRESHOLDS, FLAGS, MODULE_ID, SETTINGS } from "../constants.js";
-import { factionKey, normalizeFaction } from "./rules.js";
+import { buildFactionExport, factionKey, normalizeFaction } from "./rules.js";
 import type { FactionDef, RankDef } from "./types.js";
 
 /** All faction definitions, normalized and sorted by name. */
@@ -94,5 +94,57 @@ export function newRank(minScore = 0, name = "", description = ""): RankDef {
 export function dmgThresholdRanks(): RankDef[] {
   return DMG_THRESHOLDS.map((score) =>
     newRank(score, "", game.i18n.localize(`TIDY_RENOWN.Benefits.DMG${score}`)),
+  );
+}
+
+/** How imported factions whose id already exists in this world are handled. */
+export type ImportMode = "overwrite" | "copy";
+
+/** Ids from `incoming` that already exist in this world. */
+export function conflictingIds(incoming: readonly FactionDef[]): string[] {
+  const all = rawMap();
+  return incoming.filter((f) => f.id in all).map((f) => f.id);
+}
+
+/**
+ * Writes imported factions in a single settings update. "overwrite" replaces
+ * same-id factions (actor links keep working); "copy" gives them new ids.
+ * Rich text is cleaned the same way Foundry cleans HTML fields.
+ * Returns the ids written.
+ */
+export async function importFactions(
+  incoming: readonly FactionDef[],
+  mode: ImportMode,
+): Promise<string[]> {
+  assertGM();
+  const clean = (html?: string) => (html ? (foundry.utils.cleanHTML?.(html) ?? html) : "");
+  const all = rawMap();
+  const ids: string[] = [];
+  for (const faction of incoming) {
+    const id = mode === "copy" && faction.id in all ? foundry.utils.randomID() : faction.id;
+    all[id] = normalizeFaction({
+      ...faction,
+      id,
+      description: clean(faction.description),
+      ranks: faction.ranks.map((r) => ({ ...r, description: clean(r.description) })),
+    });
+    ids.push(id);
+  }
+  await writeAll(all);
+  return ids;
+}
+
+/** Downloads the given factions (all of them by default) as a JSON file. */
+export function exportFactions(factions: FactionDef[] = getFactions()): void {
+  const data = buildFactionExport(factions);
+  const slug =
+    factions.length === 1
+      ? (factions[0].name || "group").replace(/[^\p{L}\p{N}]+/gu, "-").toLowerCase()
+      : "groups";
+  const date = data.exportedAt.slice(0, 10);
+  foundry.utils.saveDataToFile(
+    JSON.stringify(data, null, 2),
+    "application/json",
+    `${MODULE_ID}-${slug}-${date}.json`,
   );
 }

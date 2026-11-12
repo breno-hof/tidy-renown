@@ -43,12 +43,17 @@ function actorOptions(actors: any[]) {
   }));
 }
 
-function permissions(actor: any) {
+/**
+ * `unlocked` is Tidy's sheet edit mode (`context.unlocked`). The GM only gets
+ * editing controls while the sheet is unlocked; locked, the tab is read-only.
+ */
+function permissions(actor: any, unlocked: boolean) {
   const isGM = !!game.user.isGM;
   const playersCanIncrease = !!getSetting<boolean>(SETTINGS.playersCanIncrease);
   const gmOnline = !!game.users.activeGM;
   return {
     isGM,
+    canEdit: isGM && unlocked,
     canIncrease: !isGM && playersCanIncrease && !!actor.isOwner,
     gmOnline,
     increaseTooltip: gmOnline ? t("TIDY_RENOWN.Tab.IncreaseHint") : t("TIDY_RENOWN.Notify.NoGM"),
@@ -56,10 +61,10 @@ function permissions(actor: any) {
 }
 
 /** Context for characters and the party (group) actor. */
-export async function buildScoreHolderContext(actor: any) {
+export async function buildScoreHolderContext(actor: any, unlocked = true) {
   const factions = getFactionMap();
   const relations = getRelations(actor);
-  const perms = permissions(actor);
+  const perms = permissions(actor, unlocked);
 
   const factionCards = (
     await Promise.all(
@@ -101,7 +106,8 @@ export async function buildScoreHolderContext(actor: any) {
             score: entry.score,
             member: !!entry.member,
             notesHtml,
-            hasDetails: !!descriptionHtml || benefits.length > 0 || !!notesHtml || perms.isGM,
+            showNotes: !!notesHtml || perms.canEdit,
+            hasDetails: !!descriptionHtml || benefits.length > 0 || !!notesHtml || perms.canEdit,
             cap: faction.cap,
             progressMax: faction.progressMax,
             progressPct: progress.pct,
@@ -145,12 +151,12 @@ export async function buildScoreHolderContext(actor: any) {
     npcRelations,
     hasNpcRelations: npcRelations.length > 0,
     empty: factionCards.length === 0 && npcRelations.length === 0,
-    availableFactions: perms.isGM
+    availableFactions: perms.canEdit
       ? getFactions()
           .filter((f) => !linked.has(f.id))
           .map((f) => ({ id: f.id, name: f.name }))
       : [],
-    availableNpcFolders: perms.isGM
+    availableNpcFolders: perms.canEdit
       ? actorOptions(game.actors.filter((a: any) => isNpc(a) && !linkedNpcs.has(a.id)))
       : [],
   };
@@ -163,8 +169,9 @@ const DISPOSITION_LABELS = {
 } as const;
 
 /** Context for NPC sheets. */
-export function buildNpcContext(actor: any) {
+export function buildNpcContext(actor: any, unlocked = true) {
   const isGM = !!game.user.isGM;
+  const canEdit = isGM && unlocked;
   const factions = getFactionMap();
   const npcId = actor.isToken ? (actor.token?.actorId ?? actor.id) : actor.id;
   const memberOf = getNpcFactionIds(actor)
@@ -190,6 +197,7 @@ export function buildNpcContext(actor: any) {
 
   return {
     isGM,
+    canEdit,
     npcId,
     memberOf,
     relations,
@@ -202,12 +210,12 @@ export function buildNpcContext(actor: any) {
     thresholdsLabel: t("TIDY_RENOWN.Npc.Thresholds", thresholds),
     autoDisposition: !!getSetting<boolean>(SETTINGS.autoDisposition),
     locked: isNpcDispositionLocked(actor),
-    availableFactions: isGM
+    availableFactions: canEdit
       ? getFactions()
           .filter((f) => !memberIds.has(f.id))
           .map((f) => ({ id: f.id, name: f.name }))
       : [],
-    availableCharacterFolders: isGM
+    availableCharacterFolders: canEdit
       ? actorOptions(
           game.actors.filter(
             (a: any) =>

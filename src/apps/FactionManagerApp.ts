@@ -9,11 +9,15 @@
  */
 import { MODULE_ID, TEMPLATES } from "../constants.js";
 import {
+  conflictingIds,
   createFaction,
   deleteFaction,
   dmgThresholdRanks,
+  exportFactions,
   getFaction,
   getFactions,
+  importFactions,
+  type ImportMode,
   newRank,
   saveFaction,
 } from "../data/factions.js";
@@ -35,6 +39,7 @@ import {
   factionKey,
   getRank,
   normalizeFaction,
+  parseFactionExport,
   sortRanks,
 } from "../data/rules.js";
 import type { FactionDef } from "../data/types.js";
@@ -119,6 +124,62 @@ function checkedPicks(container: ParentNode): string[] {
   return [...container.querySelectorAll<HTMLInputElement>("[data-tr-pick]:checked")].map(
     (box) => box.value,
   );
+}
+
+/** Lets the GM pick a local file and resolves with its text (null when cancelled). */
+function pickJsonFile(): Promise<string | null> {
+  return new Promise((resolve) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json,application/json";
+    input.addEventListener("change", () => {
+      const file = input.files?.[0];
+      if (!file) return resolve(null);
+      foundry.utils.readTextFromFile(file).then(resolve, () => resolve(null));
+    });
+    input.addEventListener("cancel", () => resolve(null));
+    input.click();
+  });
+}
+
+/** Asks how to handle ids that already exist; null means cancel. */
+async function askImportMode(conflicts: number): Promise<ImportMode | null> {
+  const choice = await foundry.applications.api.DialogV2.wait({
+    window: { title: t("TIDY_RENOWN.Import.Title"), icon: "fa-solid fa-file-import" },
+    content: `<p>${t("TIDY_RENOWN.Import.Conflict", { n: conflicts })}</p>`,
+    buttons: [
+      {
+        action: "overwrite",
+        label: t("TIDY_RENOWN.Import.Overwrite"),
+        icon: "fa-solid fa-arrows-rotate",
+        default: true,
+      },
+      { action: "copy", label: t("TIDY_RENOWN.Import.Copy"), icon: "fa-solid fa-copy" },
+      { action: "cancel", label: t("TIDY_RENOWN.Manager.Cancel"), icon: "fa-solid fa-xmark" },
+    ],
+    rejectClose: false,
+  });
+  return choice === "overwrite" || choice === "copy" ? choice : null;
+}
+
+/** File → parsed factions → conflict prompt → single write. Returns the first imported id. */
+async function runImport(): Promise<string | null> {
+  const text = await pickJsonFile();
+  if (text == null) return null;
+  let incoming;
+  try {
+    incoming = parseFactionExport(JSON.parse(text), () => foundry.utils.randomID());
+  } catch (err) {
+    console.warn(`${MODULE_ID} | import failed`, err);
+    ui.notifications.error(t("TIDY_RENOWN.Import.Invalid"));
+    return null;
+  }
+  const conflicts = conflictingIds(incoming).length;
+  const mode = conflicts ? await askImportMode(conflicts) : "overwrite";
+  if (!mode) return null;
+  const ids = await importFactions(incoming, mode);
+  ui.notifications.info(t("TIDY_RENOWN.Import.Done", { n: ids.length }));
+  return ids[0] ?? null;
 }
 
 function getManagerClass(): any {
@@ -313,6 +374,9 @@ function getManagerClass(): any {
         bulkClear: FactionManagerApp.#onBulkClear,
         openActor: FactionManagerApp.#onOpenActor,
         recalc: FactionManagerApp.#onRecalc,
+        importFactions: FactionManagerApp.#onImport,
+        exportAll: FactionManagerApp.#onExportAll,
+        exportFaction: FactionManagerApp.#onExportFaction,
       },
     };
 
@@ -705,6 +769,25 @@ function getManagerClass(): any {
 
     static #onOpenActor(this: FactionManagerApp, _event: Event, target: HTMLElement) {
       game.actors.get(actorIdFrom(target))?.sheet?.render(true);
+    }
+
+    static async #onImport(this: FactionManagerApp) {
+      const id = await runImport();
+      if (id) this.#select(id);
+    }
+
+    static #onExportAll() {
+      const factions = getFactions();
+      if (!factions.length) {
+        ui.notifications.warn(t("TIDY_RENOWN.Export.Empty"));
+        return;
+      }
+      exportFactions(factions);
+    }
+
+    static #onExportFaction(this: FactionManagerApp) {
+      const faction = this.#factionFromForm();
+      if (faction) exportFactions([faction]);
     }
 
     static async #onRecalc() {

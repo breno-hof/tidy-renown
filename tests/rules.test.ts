@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  buildFactionExport,
   canPlayerIncrease,
   clampScore,
   dispositionFor,
@@ -8,6 +9,7 @@ import {
   getNextRank,
   getRank,
   normalizeFaction,
+  parseFactionExport,
   partyScoreTowardNpc,
   progressOf,
   reachedRanks,
@@ -186,5 +188,35 @@ describe("duplicateRankScores", () => {
     assert.deepEqual([...duplicateRankScores(ranks)], []);
     const dupes = duplicateRankScores([...ranks, { id: "d", name: "Again", minScore: 10 }]);
     assert.deepEqual([...dupes], [10]);
+  });
+});
+
+describe("faction import / export", () => {
+  let n = 0;
+  const makeId = () => `gen${++n}`;
+  const faction = normalizeFaction({
+    id: "f1",
+    name: "Harpers",
+    ranks: [{ id: "r1", name: "Agent", minScore: 3 }],
+  } as never);
+
+  it("round-trips an export file", () => {
+    const file = JSON.parse(JSON.stringify(buildFactionExport([faction])));
+    assert.equal(file.format, "tidy-renown.factions");
+    assert.deepEqual(parseFactionExport(file, makeId), [faction]);
+  });
+  it("accepts a bare array or the raw setting map, filling missing ids", () => {
+    const [fromArray] = parseFactionExport(
+      [{ name: "Zhentarim", ranks: [{ minScore: 1 }] }],
+      makeId,
+    );
+    assert.match(fromArray.id, /^gen/);
+    assert.match(fromArray.ranks[0].id, /^gen/);
+    assert.equal(parseFactionExport({ f1: faction }, makeId)[0].id, "f1");
+  });
+  it("rejects files without factions", () => {
+    assert.throws(() => parseFactionExport({ foo: 1 }, makeId));
+    assert.throws(() => parseFactionExport("nope", makeId));
+    assert.throws(() => parseFactionExport({ factions: [] }, makeId));
   });
 });

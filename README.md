@@ -12,11 +12,16 @@ A especificação completa está em [`SPEC.md`](SPEC.md).
   benefícios sugeridos pelo livro (só texto, sem automação). O gerenciador mostra os grupos numa barra
   lateral e cada grupo em abas (Detalhes, Ranks, Membros); descrições usam o editor formatado do Foundry e ranks são criados e
   editados em uma janela própria.
+- **Importar/exportar grupos** em JSON pelo gerenciador (todos ou só o selecionado). Ao importar um
+  grupo que já existe no mundo, o mestre escolhe entre sobrescrever (os atores continuam vinculados) ou
+  importar como cópia. Só as definições são exportadas; as pontuações ficam nos atores.
 - **Renome por personagem ou pela party** (ator `group` do dnd5e), separado por grupo. Membros
   nunca ficam abaixo de 0 (regra do DMG); não membros e relações individuais com NPCs podem ficar
   negativos (extensão do módulo).
 - **Membros calculados em runtime** a partir das flags dos atores; nada é duplicado no grupo.
-- **Abas "Renome" no Tidy** para personagem, party e NPC, registradas pela API oficial do Tidy.
+- **Abas "Renome" no Tidy** para personagem, party e NPC, registradas pela API oficial do Tidy. Os
+  controles de edição do mestre só aparecem com a ficha destravada (modo de edição do Tidy); travada, a
+  aba é só leitura. Benefícios, descrição e notas de cada grupo ficam em painéis separados.
 - **Disposição automática dos tokens** (extensão do módulo): NPCs ficam Hostis abaixo de −10 e
   Amigáveis acima de 10 (limiares configuráveis), conforme a pontuação da party com os grupos do NPC
   ou com o próprio NPC. Tokens Secret ou travados não mudam.

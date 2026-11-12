@@ -20,8 +20,8 @@
       "IncreaseHint": "Ask the GM for +1 renown",
       "NextRank": "Next: {rank} at {score}",
       "MissingNpc": "Deleted NPC",
-      "Details": "Details",
-      "BenefitsCount": "{n} benefit(s)"
+      "About": "About",
+      "UnlockHint": "Unlock the sheet to edit renown."
     },
     "Rank": {
       "Unnamed": "Threshold {score}",
@@ -107,7 +107,8 @@
       "JoinFaction": "Add to group",
       "Relations": "Individual relations",
       "NoRelations": "No individual relations.",
-      "AddRelation": "Add relation"
+      "AddRelation": "Add relation",
+      "Locked": "Disposition locked"
     },
     "Disposition": {
       "hostile": "Hostile",
@@ -172,6 +173,20 @@
       "MakeMembers": "Make the selected members",
       "RemoveMembers": "Remove membership of the selected",
       "Clear": "Clear selection"
+    },
+    "Import": {
+      "Button": "Import groups",
+      "Title": "Import groups",
+      "Conflict": "{n} group(s) in this file already exist in this world. Overwrite them (actors stay linked) or import them as copies?",
+      "Overwrite": "Overwrite",
+      "Copy": "Import as copies",
+      "Invalid": "Tidy Renown: this file does not contain any groups.",
+      "Done": "Tidy Renown: {n} group(s) imported."
+    },
+    "Export": {
+      "All": "Export all groups",
+      "One": "Export this group",
+      "Empty": "There are no groups to export."
     }
   }
 }

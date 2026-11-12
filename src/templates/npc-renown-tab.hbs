@@ -23,12 +23,15 @@
     {{#if isGM}}
       <div class="tr-standing-controls">
         {{#unless autoDisposition}}<span class="tr-muted">{{localize "TIDY_RENOWN.Npc.AutoOff"}}</span>{{/unless}}
+        {{#if locked}}{{#unless canEdit}}<i class="fa-solid fa-lock tr-muted" data-tooltip="{{localize "TIDY_RENOWN.Npc.Locked"}}" inert></i>{{/unless}}{{/if}}
+        {{#if canEdit}}
         <button type="button" class="button button-icon-only button-borderless" data-tr-action="toggle-lock" data-locked="{{locked}}" data-tooltip="{{#if locked}}{{localize "TIDY_RENOWN.Npc.Unlock"}}{{else}}{{localize "TIDY_RENOWN.Npc.Lock"}}{{/if}}">
           <i class="fa-solid {{#if locked}}fa-lock{{else}}fa-lock-open{{/if}}" inert></i>
         </button>
         <button type="button" class="button button-icon-only button-borderless" data-tr-action="recalc" data-tooltip="{{localize "TIDY_RENOWN.Manager.Recalc"}}">
           <i class="fa-solid fa-rotate" inert></i>
         </button>
+        {{/if}}
       </div>
     {{/if}}
   </div>
@@ -40,7 +43,7 @@
         <li class="tr-chip"{{#if color}} style="--tr-faction-color: {{color}}"{{/if}}>
           {{#if img}}<img src="{{img}}" alt="" />{{else}}<i class="fa-solid fa-flag" inert></i>{{/if}}
           <span>{{name}}</span>
-          {{#if ../isGM}}
+          {{#if ../canEdit}}
             <button type="button" class="button button-icon-only button-borderless" data-tr-action="npc-remove-faction" data-faction-id="{{id}}" data-tooltip="{{localize "TIDY_RENOWN.Npc.LeaveFaction"}}">
               <i class="fa-solid fa-xmark" inert></i>
             </button>
@@ -52,7 +55,7 @@
     <p class="tr-muted">{{localize "TIDY_RENOWN.Npc.NoFactions"}}</p>
   {{/if}}
 
-  {{#if isGM}}
+  {{#if canEdit}}
     {{#if availableFactions.length}}
       <div class="tr-add-row">
         <select data-tr-select="npc-faction" aria-label="{{localize "TIDY_RENOWN.Npc.JoinFaction"}}">
@@ -72,7 +75,7 @@
         <li class="tr-row{{#if negative}} tr-negative{{/if}}" data-actor-id="{{actorId}}">
           <img class="tr-row-img" src="{{img}}" alt="" />
           <a class="tr-row-name" data-tr-action="open-actor" data-open-id="{{actorId}}">{{name}}</a>
-          {{#if ../isGM}}
+          {{#if ../canEdit}}
             <span class="tr-stepper">
               <button type="button" class="button" data-tr-action="adjust" data-key="{{key}}" data-delta="-1" aria-label="−1">−</button>
               <input type="number" step="1" value="{{score}}" data-tr-score data-key="{{key}}" aria-label="{{localize "TIDY_RENOWN.Tab.Score"}}" />
@@ -91,7 +94,7 @@
     <p class="tr-muted">{{localize "TIDY_RENOWN.Npc.NoRelations"}}</p>
   {{/if}}
 
-  {{#if isGM}}
+  {{#if canEdit}}
     {{#if availableCharacterFolders.length}}
       <div class="tr-add-row">
         <select data-tr-select="character" aria-label="{{localize "TIDY_RENOWN.Npc.AddRelation"}}">
