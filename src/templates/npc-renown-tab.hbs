@@ -23,14 +23,16 @@
     {{#if isGM}}
       <div class="tr-standing-controls">
         {{#unless autoDisposition}}<span class="tr-muted">{{localize "TIDY_RENOWN.Npc.AutoOff"}}</span>{{/unless}}
-        {{#if locked}}{{#unless canEdit}}<i class="fa-solid fa-lock tr-muted" data-tooltip="{{localize "TIDY_RENOWN.Npc.Locked"}}" inert></i>{{/unless}}{{/if}}
+        {{#if locked}}<i class="fa-solid fa-lock tr-muted tr-locked-only" data-tooltip="{{localize "TIDY_RENOWN.Npc.Locked"}}" inert></i>{{/if}}
         {{#if canEdit}}
+        <span class="tr-contents tr-edit-only">
         <button type="button" class="button button-icon-only button-borderless" data-tr-action="toggle-lock" data-locked="{{locked}}" data-tooltip="{{#if locked}}{{localize "TIDY_RENOWN.Npc.Unlock"}}{{else}}{{localize "TIDY_RENOWN.Npc.Lock"}}{{/if}}">
           <i class="fa-solid {{#if locked}}fa-lock{{else}}fa-lock-open{{/if}}" inert></i>
         </button>
         <button type="button" class="button button-icon-only button-borderless" data-tr-action="recalc" data-tooltip="{{localize "TIDY_RENOWN.Manager.Recalc"}}">
           <i class="fa-solid fa-rotate" inert></i>
         </button>
+        </span>
         {{/if}}
       </div>
     {{/if}}
@@ -44,7 +46,7 @@
           {{#if img}}<img src="{{img}}" alt="" />{{else}}<i class="fa-solid fa-flag" inert></i>{{/if}}
           <span>{{name}}</span>
           {{#if ../canEdit}}
-            <button type="button" class="button button-icon-only button-borderless" data-tr-action="npc-remove-faction" data-faction-id="{{id}}" data-tooltip="{{localize "TIDY_RENOWN.Npc.LeaveFaction"}}">
+            <button type="button" class="button button-icon-only button-borderless tr-edit-only" data-tr-action="npc-remove-faction" data-faction-id="{{id}}" data-tooltip="{{localize "TIDY_RENOWN.Npc.LeaveFaction"}}">
               <i class="fa-solid fa-xmark" inert></i>
             </button>
           {{/if}}
@@ -57,7 +59,7 @@
 
   {{#if canEdit}}
     {{#if availableFactions.length}}
-      <div class="tr-add-row">
+      <div class="tr-add-row tr-edit-only">
         <select data-tr-select="npc-faction" aria-label="{{localize "TIDY_RENOWN.Npc.JoinFaction"}}">
           {{#each availableFactions}}<option value="{{id}}">{{name}}</option>{{/each}}
         </select>
@@ -76,17 +78,16 @@
           <img class="tr-row-img" src="{{img}}" alt="" />
           <a class="tr-row-name" data-tr-action="open-actor" data-open-id="{{actorId}}">{{name}}</a>
           {{#if ../canEdit}}
-            <span class="tr-stepper">
+            <span class="tr-stepper tr-edit-only">
               <button type="button" class="button" data-tr-action="adjust" data-key="{{key}}" data-delta="-1" aria-label="−1">−</button>
               <input type="number" step="1" value="{{score}}" data-tr-score data-key="{{key}}" aria-label="{{localize "TIDY_RENOWN.Tab.Score"}}" />
               <button type="button" class="button" data-tr-action="adjust" data-key="{{key}}" data-delta="1" aria-label="+1">+</button>
             </span>
-            <button type="button" class="button button-icon-only button-borderless tr-danger" data-tr-action="remove" data-key="{{key}}" data-tooltip="{{localize "TIDY_RENOWN.Tab.RemoveRelation"}}">
+            <button type="button" class="button button-icon-only button-borderless tr-danger tr-edit-only" data-tr-action="remove" data-key="{{key}}" data-tooltip="{{localize "TIDY_RENOWN.Tab.RemoveRelation"}}">
               <i class="fa-solid fa-xmark" inert></i>
             </button>
-          {{else}}
-            <span class="tr-score{{#if negative}} tr-score-neg{{/if}}">{{score}}</span>
           {{/if}}
+          <span class="tr-score{{#if negative}} tr-score-neg{{/if}}{{#if ../canEdit}} tr-locked-only{{/if}}">{{score}}</span>
         </li>
       {{/each}}
     </ul>
@@ -96,7 +97,7 @@
 
   {{#if canEdit}}
     {{#if availableCharacterFolders.length}}
-      <div class="tr-add-row">
+      <div class="tr-add-row tr-edit-only">
         <select data-tr-select="character" aria-label="{{localize "TIDY_RENOWN.Npc.AddRelation"}}">
           {{#each availableCharacterFolders}}
             <optgroup label="{{name}}">

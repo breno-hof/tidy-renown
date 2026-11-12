@@ -231,17 +231,53 @@
 }
 
 /*
- * Party (group) sheets lay their tab contents out as a row (sidebar + column)
- * with no scrolling, so the tab has to grow, and scroll, on its own.
+ * Our tab container is laid out by us, whatever the sheet does with its other
+ * tabs: party (group) sheets turn tab containers into a non-scrolling row
+ * (sidebar + column), which shrank this tab to its content's width.
+ * As a column, the section stretches to the full width and height.
  */
-.tidy-renown-tab > .tr-tab {
-  flex: 1 1 auto;
+.tidy5e-sheet .tidy-tab.tidy-renown-tab.active {
+  display: flex;
+  flex-direction: column;
+  min-block-size: 0;
+}
+
+.tidy-renown-tab .tr-tab {
+  flex: 1 0 auto;
+  box-sizing: border-box;
+  inline-size: 100%;
   min-inline-size: 0;
 }
 
-.tidy5e-sheet:is(.group, .encounter) .tidy-renown-tab > .tr-tab {
+/* Party sheets do not scroll the tab container, so the section scrolls itself. */
+.tidy5e-sheet:is(.group, .encounter) .tidy-renown-tab .tr-tab {
+  flex: 1 1 0;
+  min-block-size: 0;
   overflow-y: auto;
   padding: var(--t5e-size-3x, 0.75rem) var(--t5e-size-4x, 1rem);
+}
+
+/*
+ * Edit-only controls follow Tidy's sheet lock live: Tidy toggles
+ * `sheet-mode-play` / `sheet-mode-edit` on the window itself, so this works
+ * even before (or without) the tab re-rendering. Sheets without the class
+ * show the controls (GM only; players never get them in the markup).
+ */
+.tidy-renown-tab .tr-contents {
+  display: contents;
+}
+
+.sheet-mode-play .tidy-renown-tab .tr-edit-only {
+  display: none !important;
+}
+
+.tidy-renown-tab .tr-locked-only:not(.sheet-mode-play *) {
+  display: none !important;
+}
+
+/* A card whose only toggle is the (empty) notes one has no footer when locked. */
+.sheet-mode-play .tidy-renown-tab .tr-card-toggles:not(:has(.tr-toggle:not(.tr-edit-only))) {
+  display: none;
 }
 
 /* Faction cards fill the width: one column on narrow sheets, more on wide ones. */

@@ -44,16 +44,18 @@ function actorOptions(actors: any[]) {
 }
 
 /**
- * `unlocked` is Tidy's sheet edit mode (`context.unlocked`). The GM only gets
- * editing controls while the sheet is unlocked; locked, the tab is read-only.
+ * `canEdit`: the GM gets the editing controls in the markup. Whether they are
+ * shown follows Tidy's sheet lock live, in CSS (`.tr-edit-only` /
+ * `.tr-locked-only` against the window's `sheet-mode-*` class), so toggling
+ * the lock never depends on this tab re-rendering with fresh context.
  */
-function permissions(actor: any, unlocked: boolean) {
+function permissions(actor: any) {
   const isGM = !!game.user.isGM;
   const playersCanIncrease = !!getSetting<boolean>(SETTINGS.playersCanIncrease);
   const gmOnline = !!game.users.activeGM;
   return {
     isGM,
-    canEdit: isGM && unlocked,
+    canEdit: isGM,
     canIncrease: !isGM && playersCanIncrease && !!actor.isOwner,
     gmOnline,
     increaseTooltip: gmOnline ? t("TIDY_RENOWN.Tab.IncreaseHint") : t("TIDY_RENOWN.Notify.NoGM"),
@@ -61,10 +63,10 @@ function permissions(actor: any, unlocked: boolean) {
 }
 
 /** Context for characters and the party (group) actor. */
-export async function buildScoreHolderContext(actor: any, unlocked = true) {
+export async function buildScoreHolderContext(actor: any) {
   const factions = getFactionMap();
   const relations = getRelations(actor);
-  const perms = permissions(actor, unlocked);
+  const perms = permissions(actor);
 
   const factionCards = (
     await Promise.all(
@@ -169,9 +171,9 @@ const DISPOSITION_LABELS = {
 } as const;
 
 /** Context for NPC sheets. */
-export function buildNpcContext(actor: any, unlocked = true) {
+export function buildNpcContext(actor: any) {
   const isGM = !!game.user.isGM;
-  const canEdit = isGM && unlocked;
+  const canEdit = isGM;
   const factions = getFactionMap();
   const npcId = actor.isToken ? (actor.token?.actorId ?? actor.id) : actor.id;
   const memberOf = getNpcFactionIds(actor)

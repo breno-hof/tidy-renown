@@ -17,8 +17,10 @@
     <div class="tr-empty">
       <i class="fa-solid fa-people-group" inert></i>
       <p>{{localize "TIDY_RENOWN.Tab.Empty"}}</p>
-      {{#if canEdit}}<p class="tr-muted">{{localize "TIDY_RENOWN.Tab.EmptyGM"}}</p>
-      {{else if isGM}}<p class="tr-muted">{{localize "TIDY_RENOWN.Tab.UnlockHint"}}</p>{{/if}}
+      {{#if canEdit}}
+        <p class="tr-muted tr-edit-only">{{localize "TIDY_RENOWN.Tab.EmptyGM"}}</p>
+        <p class="tr-muted tr-locked-only">{{localize "TIDY_RENOWN.Tab.UnlockHint"}}</p>
+      {{/if}}
     </div>
   {{/if}}
 
@@ -36,7 +38,7 @@
         </div>
         {{#if rankName}}<span class="tr-pill tr-pill-rank">{{rankName}}</span>{{/if}}
         {{#if ../canEdit}}
-          <span class="tr-card-actions">
+          <span class="tr-card-actions tr-edit-only">
             <button type="button" class="button button-icon-only button-borderless" data-tr-action="toggle-member" data-faction-id="{{id}}" data-member="{{member}}" data-tooltip="{{#if member}}{{localize "TIDY_RENOWN.Tab.RemoveMember"}}{{else}}{{localize "TIDY_RENOWN.Tab.MakeMember"}}{{/if}}">
               <i class="fa-solid {{#if member}}fa-user-minus{{else}}fa-user-plus{{/if}}" inert></i>
             </button>
@@ -56,12 +58,13 @@
           <span class="tr-meter-label">{{score}} / {{progressMax}}</span>
         </div>
         {{#if ../canEdit}}
-          <span class="tr-stepper">
+          <span class="tr-stepper tr-edit-only">
             <button type="button" class="button" data-tr-action="adjust" data-key="{{key}}" data-delta="-1" aria-label="−1">−</button>
             <input type="number" step="1" value="{{score}}" data-tr-score data-key="{{key}}" aria-label="{{localize "TIDY_RENOWN.Tab.Score"}}" />
             <button type="button" class="button" data-tr-action="adjust" data-key="{{key}}" data-delta="1" aria-label="+1">+</button>
           </span>
-        {{else if ../canIncrease}}
+        {{/if}}
+        {{#if ../canIncrease}}
           <button type="button" class="button tr-delta" data-tr-action="increase" data-key="{{key}}" data-tooltip="{{../increaseTooltip}}" {{#unless ../gmOnline}}disabled{{/unless}}{{#if atCap}} disabled{{/if}}>+1</button>
         {{/if}}
       </div>
@@ -83,7 +86,7 @@
             </button>
           {{/if}}
           {{#if showNotes}}
-            <button type="button" class="tr-toggle" data-tr-action="panel" data-panel="notes" aria-expanded="false">
+            <button type="button" class="tr-toggle{{#unless notesHtml}} tr-edit-only{{/unless}}" data-tr-action="panel" data-panel="notes" aria-expanded="false">
               <i class="fa-solid fa-note-sticky" inert></i> {{localize "TIDY_RENOWN.Notes.Label"}}
             </button>
           {{/if}}
@@ -107,9 +110,9 @@
           </div>
         {{/if}}
         {{#if showNotes}}
-          <div class="tr-panel tr-notes" data-tr-panel-body="notes" hidden>
+          <div class="tr-panel tr-notes{{#unless notesHtml}} tr-edit-only{{/unless}}" data-tr-panel-body="notes" hidden>
             {{#if ../canEdit}}
-              <div class="tr-notes-head">
+              <div class="tr-notes-head tr-edit-only">
                 <button type="button" class="button button-icon-only button-borderless" data-tr-action="edit-notes" data-key="{{key}}" data-tooltip="{{localize "TIDY_RENOWN.Notes.Edit"}}" aria-label="{{localize "TIDY_RENOWN.Notes.Edit"}}">
                   <i class="fa-solid fa-pen" inert></i>
                 </button>
@@ -136,19 +139,18 @@
             <a class="tr-row-name" data-tr-action="open-actor" data-open-id="{{npcId}}">{{name}}</a>
           {{/if}}
           {{#if ../canEdit}}
-            <span class="tr-stepper">
+            <span class="tr-stepper tr-edit-only">
               <button type="button" class="button" data-tr-action="adjust" data-key="{{key}}" data-delta="-1" aria-label="−1">−</button>
               <input type="number" step="1" value="{{score}}" data-tr-score data-key="{{key}}" aria-label="{{localize "TIDY_RENOWN.Tab.Score"}}" />
               <button type="button" class="button" data-tr-action="adjust" data-key="{{key}}" data-delta="1" aria-label="+1">+</button>
             </span>
-            <button type="button" class="button button-icon-only button-borderless tr-danger" data-tr-action="remove" data-key="{{key}}" data-tooltip="{{localize "TIDY_RENOWN.Tab.RemoveRelation"}}">
+            <button type="button" class="button button-icon-only button-borderless tr-danger tr-edit-only" data-tr-action="remove" data-key="{{key}}" data-tooltip="{{localize "TIDY_RENOWN.Tab.RemoveRelation"}}">
               <i class="fa-solid fa-xmark" inert></i>
             </button>
-          {{else}}
-            <span class="tr-score{{#if negative}} tr-score-neg{{/if}}">{{score}}</span>
-            {{#if ../canIncrease}}
-              <button type="button" class="button tr-delta" data-tr-action="increase" data-key="{{key}}" data-tooltip="{{../increaseTooltip}}" {{#unless ../gmOnline}}disabled{{/unless}}>+1</button>
-            {{/if}}
+          {{/if}}
+          <span class="tr-score{{#if negative}} tr-score-neg{{/if}}{{#if ../canEdit}} tr-locked-only{{/if}}">{{score}}</span>
+          {{#if ../canIncrease}}
+            <button type="button" class="button tr-delta" data-tr-action="increase" data-key="{{key}}" data-tooltip="{{../increaseTooltip}}" {{#unless ../gmOnline}}disabled{{/unless}}>+1</button>
           {{/if}}
         </li>
       {{/each}}
@@ -157,7 +159,7 @@
 
   {{#if canEdit}}
     {{#if availableFactions.length}}
-      <div class="tr-add-row">
+      <div class="tr-add-row tr-edit-only">
         <select data-tr-select="faction" aria-label="{{localize "TIDY_RENOWN.Tab.AddFaction"}}">
           {{#each availableFactions}}<option value="{{id}}">{{name}}</option>{{/each}}
         </select>
@@ -167,7 +169,7 @@
       </div>
     {{/if}}
     {{#if availableNpcFolders.length}}
-      <div class="tr-add-row">
+      <div class="tr-add-row tr-edit-only">
         <select data-tr-select="npc" aria-label="{{localize "TIDY_RENOWN.Tab.AddNpc"}}">
           {{#each availableNpcFolders}}
             <optgroup label="{{name}}">

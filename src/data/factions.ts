@@ -142,9 +142,22 @@ export function exportFactions(factions: FactionDef[] = getFactions()): void {
       ? (factions[0].name || "group").replace(/[^\p{L}\p{N}]+/gu, "-").toLowerCase()
       : "groups";
   const date = data.exportedAt.slice(0, 10);
-  foundry.utils.saveDataToFile(
+  downloadText(
     JSON.stringify(data, null, 2),
     "application/json",
     `${MODULE_ID}-${slug}-${date}.json`,
   );
+}
+
+/** Browser download without relying on Foundry's (moved/deprecated) file helpers. */
+function downloadText(text: string, type: string, filename: string): void {
+  const url = URL.createObjectURL(new Blob([text], { type }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.hidden = true;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }

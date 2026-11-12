@@ -126,18 +126,29 @@ function checkedPicks(container: ParentNode): string[] {
   );
 }
 
-/** Lets the GM pick a local file and resolves with its text (null when cancelled). */
+/**
+ * Lets the GM pick a local file and resolves with its text (null when cancelled).
+ * The input lives in the document while the picker is open: some browsers
+ * (and Electron) never fire `change` for a detached input.
+ */
 function pickJsonFile(): Promise<string | null> {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const input = document.createElement("input");
     input.type = "file";
     input.accept = ".json,application/json";
+    input.hidden = true;
+    const done = () => input.remove();
     input.addEventListener("change", () => {
       const file = input.files?.[0];
+      done();
       if (!file) return resolve(null);
-      foundry.utils.readTextFromFile(file).then(resolve, () => resolve(null));
+      file.text().then(resolve, reject);
     });
-    input.addEventListener("cancel", () => resolve(null));
+    input.addEventListener("cancel", () => {
+      done();
+      resolve(null);
+    });
+    document.body.append(input);
     input.click();
   });
 }
@@ -164,7 +175,14 @@ async function askImportMode(conflicts: number): Promise<ImportMode | null> {
 
 /** File → parsed factions → conflict prompt → single write. Returns the first imported id. */
 async function runImport(): Promise<string | null> {
-  const text = await pickJsonFile();
+  let text: string | null;
+  try {
+    text = await pickJsonFile();
+  } catch (err) {
+    console.error(`${MODULE_ID} | could not read the file`, err);
+    ui.notifications.error(t("TIDY_RENOWN.Import.Invalid"));
+    return null;
+  }
   if (text == null) return null;
   let incoming;
   try {
@@ -177,9 +195,25 @@ async function runImport(): Promise<string | null> {
   const conflicts = conflictingIds(incoming).length;
   const mode = conflicts ? await askImportMode(conflicts) : "overwrite";
   if (!mode) return null;
-  const ids = await importFactions(incoming, mode);
+  let ids: string[];
+  try {
+    ids = await importFactions(incoming, mode);
+  } catch (err) {
+    console.error(`${MODULE_ID} | import failed`, err);
+    ui.notifications.error(t("TIDY_RENOWN.Notify.Error"));
+    return null;
+  }
   ui.notifications.info(t("TIDY_RENOWN.Import.Done", { n: ids.length }));
   return ids[0] ?? null;
+}
+
+function runExport(factions: FactionDef[]): void {
+  try {
+    exportFactions(factions);
+  } catch (err) {
+    console.error(`${MODULE_ID} | export failed`, err);
+    ui.notifications.error(t("TIDY_RENOWN.Notify.Error"));
+  }
 }
 
 function getManagerClass(): any {
@@ -782,12 +816,13 @@ function getManagerClass(): any {
         ui.notifications.warn(t("TIDY_RENOWN.Export.Empty"));
         return;
       }
-      exportFactions(factions);
+      runExport(factions);
     }
 
     static #onExportFaction(this: FactionManagerApp) {
-      const faction = this.#factionFromForm();
-      if (faction) exportFactions([faction]);
+      // The form saves on change, so the stored faction is current.
+      const faction = this.selectedId ? getFaction(this.selectedId) : null;
+      if (faction) runExport([faction]);
     }
 
     static async #onRecalc() {
